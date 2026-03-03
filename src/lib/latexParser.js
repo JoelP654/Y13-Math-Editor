@@ -1,9 +1,8 @@
-// import jsonExpressions from "./expressions.json" with { type: 'json' }
-
 class Token {
-    constructor(stringValue, tokenType) {
+    constructor(stringValue, tokenType, children) {
         this.stringValue = stringValue
         this.tokenType = tokenType
+        this.children = children
     }
 }
 
@@ -38,21 +37,76 @@ const parseComment = (input) => {
     }
 }
 
-// Returns an array of expressions
+// Returns an array of TOKENs
 const parseChunk = (input) => {
-    var values = []
-    var valueBuffer = []
+    var tokens = []
+    var scanBuffer = []
+    var curlyBraces = 0
+    var braceBuffer = []
+    var inExpression = false
+
+    const writeScanBuffer = () => {
+        if (scanBuffer.length > 0) {
+            tokens.push(new Token(scanBuffer.join(""), "expression"))
+        }
+        scanBuffer = []
+    }
 
     for (var i = 0; i < input.length; i++) {
-        if (input[i] == " ") {
-            values.push(valueBuffer.join(""))
-            valueBuffer = []
+
+        if (input[i] == "{") {
+            curlyBraces += 1
+        }
+        if (input[i] == "}") {
+            curlyBraces -= 1
+            if (curlyBraces < 0) {
+                return ["ERROR: Unresolved }"]
+            }
+            if (curlyBraces == 0) {
+                if (inExpression) {
+                    tokens.push(new Token(scanBuffer.join(""), "expression", parseChunk(braceBuffer.join(""))))
+                    scanBuffer = []
+                    braceBuffer = []
+                    inExpression = false
+                } else {
+                    writeScanBuffer()
+                    tokens.push(...parseChunk(braceBuffer.join("")))
+                    braceBuffer = []
+                }
+            }
+        }
+
+        if (curlyBraces == 0) {
+
+            if (input[i] == " ") {
+                writeScanBuffer()
+                inExpression = false
+                continue
+            }
+            if (input[i] == "\\") {
+                writeScanBuffer()
+                inExpression = true
+            }
+            
+            if (input[i] == "{" && curlyBraces == 1) {continue}
+            else if (input[i] == "}" && curlyBraces == 0) {continue}
+            else {scanBuffer.push(input[i])}
+            
         } else {
-            valueBuffer.push(input[i])
+
+            if (!(input[i] == "{" && curlyBraces == 1)) {
+                braceBuffer.push(input[i])
+            }
+
         }
     }
-    values.push(valueBuffer.join(""))
-    return values
+    
+    if (curlyBraces > 0) {
+        return ["ERROR: Unresolved {"]
+    }
+
+    writeScanBuffer()
+    return tokens
 }
 
 // Returns an array of tokens, minimal nesting
@@ -61,11 +115,8 @@ export const parseLatex = (input) => {
     var tokens = []
     lines.forEach(line => {
         var result = parseComment(line)
-        console.log(result)
-        var expressions = parseChunk(result.preComment)
-        expressions.forEach(expression => {
-            tokens.push(new Token(expression, "expression"))
-        })
+        tokens.push(...parseChunk(result.preComment))
+
         if (result.comment != "") {
             tokens.push(new Token(result.comment, "comment"))
         }
