@@ -1,10 +1,4 @@
-class Token {
-    constructor(stringValue, tokenType, children) {
-        this.stringValue = stringValue
-        this.tokenType = tokenType
-        this.children = children
-    }
-}
+import Token from './token.js'
 
 const seperateByFirstOccurence = (string, seperator) => {
     const [before, ...rest] = string.split(seperator)
@@ -14,7 +8,7 @@ const seperateByFirstOccurence = (string, seperator) => {
 
 const parseLines = (input) => {
     if (input != "") {
-        var lines = input.split("\n").join("\\\\").split("\\\\").join("\\newline").split("\\newline")
+        var lines = input.split("\\\\").join("\\newline").split("\\newline")
         return lines
     } else {
         return []
@@ -41,7 +35,7 @@ const parseComment = (input) => {
 const parseChunk = (input) => {
     var tokens = []
     var scanBuffer = []
-    var curlyBraces = 0
+    var braceCount = 0
     var braceBuffer = []
     var inExpression = false
 
@@ -54,15 +48,15 @@ const parseChunk = (input) => {
 
     for (var i = 0; i < input.length; i++) {
 
-        if (input[i] == "{") {
-            curlyBraces += 1
+        if (input[i] == "{" || input[i] == "[") {
+            braceCount += 1
         }
-        if (input[i] == "}") {
-            curlyBraces -= 1
-            if (curlyBraces < 0) {
+        if (input[i] == "}" || input[i] == "]") {
+            braceCount -= 1
+            if (braceCount < 0) {
                 return ["ERROR: Unresolved }"]
             }
-            if (curlyBraces == 0) {
+            if (braceCount == 0) {
                 if (inExpression) {
                     tokens.push(new Token(scanBuffer.join(""), "expression", parseChunk(braceBuffer.join(""))))
                     scanBuffer = []
@@ -76,9 +70,9 @@ const parseChunk = (input) => {
             }
         }
 
-        if (curlyBraces == 0) {
+        if (braceCount == 0) {
 
-            if (input[i] == " ") {
+            if (input[i] == " " || input[i] == "\n") {
                 writeScanBuffer()
                 inExpression = false
                 continue
@@ -87,21 +81,24 @@ const parseChunk = (input) => {
                 writeScanBuffer()
                 inExpression = true
             }
+            if (input[i] == "^" || input[i] == "_") {
+                writeScanBuffer()
+            }
             
-            if (input[i] == "{" && curlyBraces == 1) {continue}
-            else if (input[i] == "}" && curlyBraces == 0) {continue}
+            if ((input[i] == "{" || input[i] == "[") && braceCount == 1) {continue}
+            else if ((input[i] == "}" || input[i] == "]") && braceCount == 0) {continue}
             else {scanBuffer.push(input[i])}
             
         } else {
 
-            if (!(input[i] == "{" && curlyBraces == 1)) {
+            if (!((input[i] == "{" || input[i] == "[") && braceCount == 1)) {
                 braceBuffer.push(input[i])
             }
 
         }
     }
     
-    if (curlyBraces > 0) {
+    if (braceCount > 0) {
         return ["ERROR: Unresolved {"]
     }
 
