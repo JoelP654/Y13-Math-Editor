@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { BlockMath } from "react-katex"
 import { parseLatex } from "../lib/latexParser"
 
 function Editor() {
@@ -17,6 +18,7 @@ function Editor() {
                 onChange={(e) => setInput(e.target.value)}    
             />
             <h1>{input}</h1>
+            <BlockMath math={input}/>
         </div>
     )
 }
