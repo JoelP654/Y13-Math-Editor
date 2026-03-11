@@ -79,7 +79,6 @@ const parseChunk = (input) => {
 
     // Scan across every character in the string
     for (var i = 0; i < input.length; i++) {
-        console.log("CHARACTER: " + input[i] + singleCharExpression)
 
         // If character is opening brace, increment count
         // It doesn't really matter what type of brace, the KaTeX API should resolve any errors
