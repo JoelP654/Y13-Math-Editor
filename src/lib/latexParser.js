@@ -212,6 +212,5 @@ export const parseLatex = (input) => {
         }
     })
 
-    // Write tokens to console (debugging)
-    console.log(tokens)
+    return tokens
 }

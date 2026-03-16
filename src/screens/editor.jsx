@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { BlockMath } from "react-katex"
 import 'katex/dist/katex.min.css'
 import { parseLatex } from "../lib/latexParser"
+import { IdentifyTokens } from "../lib/tokenIdentifier"
 
 function Editor() {
 
@@ -9,21 +10,12 @@ function Editor() {
     const mathRef = useRef(null)
 
     useEffect(() => {
-        parseLatex(input)
+        const parsedTokens = parseLatex(input)
 
         var html = mathRef.current
         if (!html.querySelector(".katex-error")) {
             var katexHtml = html.querySelector(".katex-html")
-            var mathElements = katexHtml.querySelectorAll("span")
-            var mathStrings = []
-            mathElements.forEach(element => {
-                if (element.childElementCount == 0 &&
-                    element.className[0] == "m" &&
-                    element.innerText != "") {
-                    mathStrings.push(element.innerText)
-                }
-            })
-            console.log(mathStrings)
+            IdentifyTokens(katexHtml, parsedTokens)
         }
 
     }, [input])
