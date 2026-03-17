@@ -1,29 +1,43 @@
-export const IdentifyTokens = (katexHtml, tokens) => {
-    var mathElements = katexHtml.querySelectorAll("span")
-    var mathStrings = []
-    mathElements.forEach(element => {
-        if (element.childElementCount == 0 &&
-            element.className[0] == "m" &&
-            element.innerText != "") {
-            mathStrings.push(element.innerText)
+export const identifyTokens = (katexHtml, tokens) => {
+    var htmlSpans = katexHtml.querySelectorAll("span")
+    var mathSpans = []
+    htmlSpans.forEach(span => {
+        if (span.childElementCount == 0 &&
+            span.className[0] == "m" &&
+            span.innerText != "") {
+            mathSpans.push(span)
         }
     })
-    var mathCharacters = []
-    mathStrings.forEach(string => {
-        mathCharacters.push(...string.split(""))
+
+    var mathChars = []
+    mathSpans.forEach(span => {
+
+        span.innerText.split("").forEach(char => {
+            mathChars.push({
+                "char": char,
+                "span": span
+            })
+        })
     })
     
-    tokens.forEach(token => {
+
+    const identifyToken = (token) => {
+
+        token.children.forEach(childToken => {
+            identifyToken(childToken)
+        })
+
+
         var tokenChars = token.stringValue.split("")
         var tokenFound = false
-        for (var i = 0; i < mathCharacters.length; i++) {
+        for (var i = 0; i < mathChars.length; i++) {
 
             if (!tokenFound) {
 
                 var success = true
                 var searchIndex = 0
                 tokenChars.forEach(tokenChar => {
-                    if ((i + searchIndex) < mathCharacters.length && mathCharacters[i + searchIndex] == tokenChar) {
+                    if ((i + searchIndex) < mathChars.length && mathChars[i + searchIndex].char == tokenChar) {
                         searchIndex++
                     } else {
                         success = false
@@ -31,7 +45,14 @@ export const IdentifyTokens = (katexHtml, tokens) => {
                 
                 if (success) {
                     tokenFound = true
-                    mathCharacters.splice(i, tokenChars.length, "")
+
+                    for (var j = 0; j < tokenChars.length; j++) {
+                        mathChars[i + j].char = ""
+                        if (!token.htmlSpans.includes(mathChars[i + j].span)) {
+                            token.htmlSpans.push(mathChars[i + j].span)
+                        }
+                    }
+                    
                     console.log("Token " + token.stringValue + " found at index " + i)
                 }
 
@@ -40,10 +61,19 @@ export const IdentifyTokens = (katexHtml, tokens) => {
             }
 
         }
+
         if (!tokenFound) {
             console.log("Token " + token.stringValue + " was not found")
         }
         
-        
+    
+    }
+
+
+    tokens.forEach(token => {
+        identifyToken(token)
     })
+
+    return tokens
+
 }

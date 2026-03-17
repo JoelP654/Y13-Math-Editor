@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { BlockMath } from "react-katex"
 import 'katex/dist/katex.min.css'
 import { parseLatex } from "../lib/latexParser"
-import { IdentifyTokens } from "../lib/tokenIdentifier"
+import { identifyTokens } from "../lib/tokenIdentifier"
 
 function Editor() {
 
@@ -15,7 +15,7 @@ function Editor() {
         var html = mathRef.current
         if (!html.querySelector(".katex-error")) {
             var katexHtml = html.querySelector(".katex-html")
-            IdentifyTokens(katexHtml, parsedTokens)
+            console.log(identifyTokens(katexHtml, parsedTokens))
         }
 
     }, [input])
