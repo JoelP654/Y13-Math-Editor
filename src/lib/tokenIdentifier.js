@@ -47,7 +47,7 @@ export const identifyTokens = (katexHtml, tokens) => {
                 
                 if (success) {
                     tokenFound = true
-
+                    console.log("Token " + token.stringValue + " found at " + i)
                     for (var j = 0; j < tokenChars.length; j++) {
                         if ((i + j) < mathChars.length) {
                             mathChars[i + j].char = ""

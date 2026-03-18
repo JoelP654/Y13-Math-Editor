@@ -49,6 +49,18 @@ export default class Token {
         this.boxDiv.addEventListener("blur", () => {
             this.boxDiv.classList.remove("focused-box")
         })
+        this.boxDiv.addEventListener("keydown", ({key}) => {
+            if (key == "Backspace") {
+                this.stringValue = this.stringValue.slice(0, -1)
+            }
+            if (key.length === 1) {
+                this.stringValue += key
+                
+            }
+            console.log(this.stringValue)
+
+            this.boxDiv.innerText = ""
+        })
 
         document.getElementById("bBox-container").appendChild(this.boxDiv)
     }

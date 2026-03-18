@@ -118,10 +118,19 @@ const parseChunk = (input) => {
         // If character is not in braces
         if (braceCount == 0) {
 
-            // If character is a space or new line, write token
-            if (input[i] == " " || input[i] == "\n") {
+            // If character is a new line, write token
+            if (input[i] == "\n") {
                 writeScanBuffer()
                 inExpression = false
+                continue
+            }
+
+            // If input is a space, if its after an expression, end it. Continue so the space isn't written
+            if (input[i] == " ") {
+                if (inExpression) {
+                    writeScanBuffer()
+                    inExpression = false
+                }
                 continue
             }
 
