@@ -20,13 +20,15 @@ export const identifyTokens = (katexHtml, tokens) => {
         })
     })
     
+    var unfoundTokens = []
 
     const identifyToken = (token) => {
 
-        token.children.forEach(childToken => {
-            identifyToken(childToken)
-        })
-
+        if (token.children.length > 0) {
+            token.children.forEach(childToken => {
+                identifyToken(childToken)
+            })
+        }
 
         var tokenChars = token.stringValue.split("")
         var tokenFound = false
@@ -47,13 +49,14 @@ export const identifyTokens = (katexHtml, tokens) => {
                     tokenFound = true
 
                     for (var j = 0; j < tokenChars.length; j++) {
-                        mathChars[i + j].char = ""
-                        if (!token.htmlSpans.includes(mathChars[i + j].span)) {
-                            token.htmlSpans.push(mathChars[i + j].span)
+                        if ((i + j) < mathChars.length) {
+                            mathChars[i + j].char = ""
+                            if (!token.htmlSpans.includes(mathChars[i + j].span)) {
+                                token.htmlSpans.push(mathChars[i + j].span)
+                            }
                         }
                     }
-                    
-                    console.log("Token " + token.stringValue + " found at index " + i)
+                    token.updateSpans()
                 }
 
                 })
@@ -63,16 +66,31 @@ export const identifyTokens = (katexHtml, tokens) => {
         }
 
         if (!tokenFound) {
-            console.log("Token " + token.stringValue + " was not found")
-        }
-        
-    
+            unfoundTokens.push(token)
+        } 
     }
 
 
+    
     tokens.forEach(token => {
         identifyToken(token)
     })
+
+
+    if (unfoundTokens.length > 0) {
+        var foundIndex = 0
+        
+        mathChars.forEach(char => {
+            
+            if (char.char != "") {
+                
+                char.char = ""
+                unfoundTokens[foundIndex].htmlSpans.push(char.span)
+                unfoundTokens[foundIndex].updateSpans()
+                foundIndex += 1
+            }
+        })
+    }
 
     return tokens
 

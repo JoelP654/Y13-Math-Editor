@@ -1,0 +1,20 @@
+.katex {
+    pointer-events: none;
+}
+
+.hovered-box {
+    padding: 1px;
+    margin-left: -3px;
+    margin-top: -3px;
+    border: 2px dotted black;
+}
+
+.focused-box {
+    caret-color: transparent;
+    outline: none;
+    box-shadow: none;
+    padding: 1px;
+    margin-left: -3px;
+    margin-top: -3px;
+    border: 2px solid black;
+}
