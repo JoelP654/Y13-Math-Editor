@@ -18,8 +18,8 @@ function Editor() {
 
             document.getElementById("bBox-container").replaceChildren()
 
-            const identifiedTokens = identifyTokens(katexHtml, parsedTokens)
-            console.log(identifiedTokens)
+            //const identifiedTokens =
+            identifyTokens(katexHtml, parsedTokens)
         }
 
     }, [input])

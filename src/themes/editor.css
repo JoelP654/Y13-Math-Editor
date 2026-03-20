@@ -2,10 +2,14 @@
     pointer-events: none;
 }
 
-.hovered-box {
+.math-box {
     padding: 1px;
     margin-left: -3px;
     margin-top: -3px;
+    cursor: text;
+}
+
+.hovered-box {
     border: 2px dotted black;
 }
 
@@ -13,8 +17,5 @@
     caret-color: transparent;
     outline: none;
     box-shadow: none;
-    padding: 1px;
-    margin-left: -3px;
-    margin-top: -3px;
     border: 2px solid black;
 }

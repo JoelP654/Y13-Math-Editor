@@ -1,7 +1,11 @@
+// Joel Patterson
+// 21/3/26
+// Token Class
+// Token object holds variables, and contains functionality for input
 
-// Token is currently just a container for variables
-// Eventually, I will add functionality to the class, probably for detecting input and rendering
 export default class Token {
+
+    // On class init, setup variables
     constructor(stringValue, tokenType, children) {
         this.stringValue = stringValue
         this.tokenType = tokenType
@@ -12,13 +16,18 @@ export default class Token {
         this.htmlSpans = []
     }
 
+    // When spans are received, this function is called
+    // It sets up the input
     updateSpans() {
 
+
+        // Calculate bounding box, maxX and so on
         var maxX = -Infinity
         var maxY = -Infinity
         var minX = Infinity
         var minY = Infinity
 
+        // For each span, update bbox
         this.htmlSpans.forEach(span => {
             var box = span.getBoundingClientRect()
             maxX = Math.max(box.right, maxX)
@@ -27,16 +36,21 @@ export default class Token {
             minY = Math.min(box.top, minY)
         })
         
+        // Create input box
         this.boxDiv = document.createElement("div")
+        this.boxDiv.classList.add("math-box")
 
+        // Position box according to bbox
         this.boxDiv.style.position = "fixed"
         this.boxDiv.style.left = minX + "px"
         this.boxDiv.style.top = minY + "px"
         this.boxDiv.style.width = (maxX - minX) + "px"
         this.boxDiv.style.height = (maxY - minY) + "px"
         
-        this.boxDiv.contentEditable = true
+        // This means the input box can be tabbed to
+        this.boxDiv.tabIndex = -1
 
+        // For each event, add a listener to add or remove class for styling
         this.boxDiv.addEventListener("mouseenter", () => {
             this.boxDiv.classList.add("hovered-box")
         })
@@ -44,24 +58,30 @@ export default class Token {
             this.boxDiv.classList.remove("hovered-box")
         })
         this.boxDiv.addEventListener("focus", () => {
+            console.log(this.stringValue)
             this.boxDiv.classList.add("focused-box")
         })
         this.boxDiv.addEventListener("blur", () => {
             this.boxDiv.classList.remove("focused-box")
         })
+
+        // On keypress for the input div
         this.boxDiv.addEventListener("keydown", ({key}) => {
+
+            // If backspace, remove last character of string
             if (key == "Backspace") {
                 this.stringValue = this.stringValue.slice(0, -1)
             }
+            // If the key is a character (length 1), add the character
             if (key.length === 1) {
                 this.stringValue += key
                 
             }
-            console.log(this.stringValue)
-
+            // Ensure no text has been added to the div
             this.boxDiv.innerText = ""
         })
 
+        // Add bbox to bbox container
         document.getElementById("bBox-container").appendChild(this.boxDiv)
     }
 
