@@ -59,9 +59,6 @@ export const identifyTokens = (katexHtml, tokens) => {
                 "span": span
             })
     })
-    
-    // var clone = JSON.parse(JSON.stringify(mathChars))
-    // console.log(clone)
 
     var unfoundTokens = []
 
@@ -70,13 +67,13 @@ export const identifyTokens = (katexHtml, tokens) => {
     const identifyToken = (token) => {
 
         // If token has any children, identify the children
-        if (token.children.length > 0) {
+        if (token.children && token.children.length > 0) {
             token.children.forEach(childToken => {
                 identifyToken(childToken)
             })
         }
 
-        // Split tokens characters
+        // Split tokens characters - USING identifyText
         var tokenChars = token.identifyText.split("")
 
         var tokenFound = false

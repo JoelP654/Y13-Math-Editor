@@ -11,6 +11,8 @@ export default class Token {
     constructor(stringValue, tokenType, children) {
 
         this.stringValue = stringValue
+
+        // Get identified value
         this.identifyText = identifySymbol(stringValue)
 
         this.tokenType = tokenType
