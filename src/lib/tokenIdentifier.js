@@ -60,6 +60,9 @@ export const identifyTokens = (katexHtml, tokens) => {
             })
     })
     
+    // var clone = JSON.parse(JSON.stringify(mathChars))
+    // console.log(clone)
+
     var unfoundTokens = []
 
     // Inner function just identifies one token
@@ -74,7 +77,7 @@ export const identifyTokens = (katexHtml, tokens) => {
         }
 
         // Split tokens characters
-        var tokenChars = token.stringValue.split("")
+        var tokenChars = token.identifyText.split("")
 
         var tokenFound = false
 

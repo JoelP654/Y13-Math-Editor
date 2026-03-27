@@ -164,7 +164,7 @@ const parseChunk = (input) => {
 
                         // Create tokens, push and continue
                         var childToken = new Token(input[i], "expression")
-                        var newToken = new Token(scanBuffer.join(""), "expression", childToken)
+                        var newToken = new Token(scanBuffer.join(""), "expression", [childToken])
                         tokens.push(newToken)
                         scanBuffer = []
                         continue

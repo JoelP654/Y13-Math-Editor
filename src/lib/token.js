@@ -3,11 +3,16 @@
 // Token Class
 // Token object holds variables, and contains functionality for input
 
+import { identifySymbol } from "./symbolIdentifier.jsx"
+
 export default class Token {
 
     // On class init, setup variables
     constructor(stringValue, tokenType, children) {
+
         this.stringValue = stringValue
+        this.identifyText = identifySymbol(stringValue)
+
         this.tokenType = tokenType
         
         if (children) {this.children = children}
@@ -58,7 +63,6 @@ export default class Token {
             this.boxDiv.classList.remove("hovered-box")
         })
         this.boxDiv.addEventListener("focus", () => {
-            console.log(this.stringValue)
             this.boxDiv.classList.add("focused-box")
         })
         this.boxDiv.addEventListener("blur", () => {
@@ -71,14 +75,18 @@ export default class Token {
             // If backspace, remove last character of string
             if (key == "Backspace") {
                 this.stringValue = this.stringValue.slice(0, -1)
+                this.writeAll()
             }
+
             // If the key is a character (length 1), add the character
             if (key.length === 1) {
                 this.stringValue += key
-                
+                this.writeAll()
             }
+
             // Ensure no text has been added to the div
             this.boxDiv.innerText = ""
+
         })
 
         // Add bbox to bbox container
