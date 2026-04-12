@@ -59,7 +59,6 @@ export const identifyTokens = (katexHtml, tokens) => {
                 "span": span
             })
     })
-
     var unfoundTokens = []
 
     // Inner function just identifies one token
@@ -74,7 +73,8 @@ export const identifyTokens = (katexHtml, tokens) => {
         }
 
         // Split tokens characters - USING identifyText
-        var tokenChars = token.identifyText.split("")
+        console.log(token.identifyText)
+        var tokenChars = token.identifyText ? token.identifyText.split("") : []
 
         var tokenFound = false
 

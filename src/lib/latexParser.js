@@ -61,139 +61,83 @@ const parseComment = (input) => {
 // It then creates a token for whats in the buffer
 // If brackets are detected, it doesn't try parse whats in them, just gets the string then parses the string
 const parseChunk = (input) => {
-
     var tokens = [] // Array of tokens
     var scanBuffer = [] // Buffer for scanning
     var braceCount = 0 // Count of open braces, should never be negative
     var braceBuffer = [] // Buffer for string inside braces
-    var inExpression = false // Bool - controls whether content of braces is made as a child of expression or not
-    var singleCharExpression = false // Bool - controls whether expression is read as single or multi character
+    var inSlash = false
+    var inChar = false
 
-    // This function takes whats in the scan buffer, creates a token, then clears the buffer
+    // This function takes whats in a buffer and creates a token for it
     const writeScanBuffer = () => {
         if (scanBuffer.length > 0) {
             tokens.push(new Token(scanBuffer.join(""), "expression"))
         }
         scanBuffer = []
     }
+    const writeChild = (string) => {
+        if (string.length > 0) {
+            console.log("DFGH " + tokens[tokens.length - 1].stringValue)
+            tokens[tokens.length - 1].children.push(new Token(string, "expression"))
+        }
+    }
+
 
     // Scan across every character in the string
-    for (var i = 0; i < input.length; i++) {
+    for (var i = 0; i < input.length; i++) { 
 
-        // If character is opening brace, increment count
-        // It doesn't really matter what type of brace, the KaTeX API should resolve any errors
-        if (input[i] == "{" || input[i] == "[") {
-            braceCount += 1
-        }
+        if ("}]".includes(input[i])) { braceCount -= 1 }
 
-        // If character is closing brace, decrement count
-        if (input[i] == "}" || input[i] == "]") {
-            braceCount -= 1
+        // Excludes braces
+        if (braceCount > 0) { braceBuffer.push(input[i]) }
 
-            // If brace count goes negative, there must be an unresolved closing brace
-            if (braceCount < 0) {
-                return ["ERROR: Unresolved }"]
-            }
-
-            // If brace count is equal to zero after a closing brace, an expression must be finished
-            if (braceCount == 0) {
-                
-                // If the scanner was reading an expression, write the parsed brace buffer as a child of the expression in the scan buffer
-                if (inExpression) {
-                    tokens.push(new Token(scanBuffer.join(""), "expression", parseChunk(braceBuffer.join(""))))
-                    scanBuffer = []
-                    braceBuffer = []
-                    inExpression = false
-                }
-
-                // If the scanner wasn't reading an expression, write the scan buffer and parsed brace buffer seperately
-                else {
-                    writeScanBuffer()
-                    tokens.push(...parseChunk(braceBuffer.join("")))
-                    braceBuffer = []
-                }
-            }
-        }
-
-        // If character is not in braces
+        // Includes braces
         if (braceCount == 0) {
-
-            // If character is a new line, write token
-            if (input[i] == "\n") {
-                writeScanBuffer()
-                inExpression = false
+            if ("}]".includes(input[i])) {
+                parseChunk(braceBuffer.join("")).forEach((token) => {
+                    if (inSlash || inChar) { tokens[tokens.length - 1].children.push(token) }
+                    else { tokens.push(token) }
+                })
+                inChar = false
+                braceBuffer = []
                 continue
             }
-
-            // If input is a space, if its after an expression, end it. Continue so the space isn't written
-            if (input[i] == " ") {
-                if (inExpression) {
-                    writeScanBuffer()
-                    inExpression = false
-                }
-                continue
-            }
-
-            // If character is the start of an expression, write token, and start reading expression
-            if (input[i] == "\\" || input[i] == "^" || input[i] == "_") {
+            
+            if ("\\".includes(input[i])) { writeScanBuffer(); inSlash = true }
+            console.log(input[i] + inSlash)
+            if ("^_".includes(input[i])) {
                 writeScanBuffer()
-                inExpression = true
-
-                // If single character expression, set bool to true
-                if (input[i] == "^" || input[i] == "_") {
-                    singleCharExpression = true
-                }
-            }
-            
-            // Short circuits if detecting first brace or last brace (aren't included, we only want their content)
-            if ((input[i] == "{" || input[i] == "[") && braceCount == 1) {continue}
-            else if ((input[i] == "}" || input[i] == "]") && braceCount == 0) {continue}
-            
-            // If fits criteria
-            else {
-
-
-                // If character after single char expression
-                if (singleCharExpression && !(input[i] == "^" || input[i] == "_")) {
-
-                    // Set single char expression to false
-                    singleCharExpression = false
-
-                    // If not brackets
-                    if (!(input[i] == "{" || input[i] == "[")) {
-
-                        // Create tokens, push and continue
-                        var childToken = new Token(input[i], "expression")
-                        var newToken = new Token(scanBuffer.join(""), "expression", [childToken])
-                        tokens.push(newToken)
-                        scanBuffer = []
-                        continue
-                    }
-                    
-                }
-
-                // Append char to scan buffer
                 scanBuffer.push(input[i])
+                writeScanBuffer()
+                inChar = true
+                inSlash = false
+                continue
             }
-        }
-
-        // If the character is in braces
-        else {
-
-            // Append character to brace buffer if it isn't the first brace (again, we only want the content)
-            if (!((input[i] == "{" || input[i] == "[") && braceCount == 1)) {
-                braceBuffer.push(input[i])
+            
+            if (" ".includes(input[i])) {
+                if (inSlash) {
+                    if (inChar) {
+                        writeChild(scanBuffer.join(""))
+                        inChar = false
+                        scanBuffer = []}
+                    else { writeScanBuffer() }
+                    inSlash = false
+                }
             }
+            else if ("{[\n".includes(input[i])) { writeScanBuffer() }
+            else if (inChar && !inSlash) {
+                writeChild(input[i])
+                inChar = false
+            }
+            // else if ("".includes(input[i])) { continue }
+            else { scanBuffer.push(input[i]) }
         }
-    }
-    
-    // If scanning is complete and the brace count is over zero, there must be an unresolved opening brace
-    if (braceCount > 0) {
-        return ["ERROR: Unresolved {"]
+        if ("{[".includes(input[i])) { braceCount += 1 }
+
     }
 
-    // Write any remaining content of the scan buffer
-    writeScanBuffer()
+    if (inChar) { writeChild(scanBuffer.join("")) }
+    else { writeScanBuffer() }
 
     // Return the array of tokens
     return tokens

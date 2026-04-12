@@ -4,7 +4,7 @@ import 'katex/dist/katex.min.css'
 import { parseLatex } from "../lib/latexParser"
 import { identifyTokens } from "../lib/tokenIdentifier"
 import "../themes/editor.css"
-import { writeToken } from "../lib/latexWriter"
+// import { writeToken } from "../lib/latexWriter"
 function Editor() {
 
     const [input, setInput] = useState("")
@@ -17,36 +17,36 @@ function Editor() {
 
         var html = mathRef.current
         if (!html.querySelector(".katex-error")) {
-            var katexHtml = html.querySelector(".katex-html")
+            // var katexHtml = html.querySelector(".katex-html")
 
             // Empty bbox container
             document.getElementById("bBox-container").replaceChildren()
 
             
-            identifyTokens(katexHtml, parsedTokens)
+            // identifyTokens(katexHtml, parsedTokens)
             console.log(parsedTokens)
 
 
-            const addWriteFunction = (token) => {
+            // const addWriteFunction = (token) => {
 
-                if (token.children.length > 0) {
-                    token.children.forEach(child => {
-                        addWriteFunction(child)
-                    })
-                }
+            //     if (token.children.length > 0) {
+            //         token.children.forEach(child => {
+            //             addWriteFunction(child)
+            //         })
+            //     }
 
-                token.writeAll = () => {
-                    var newInput = ""
-                    parsedTokens.forEach(token => {
-                        newInput += writeToken(token)
-                    })
-                    setInput(newInput)
-                }
-            }
+            //     token.writeAll = () => {
+            //         var newInput = ""
+            //         parsedTokens.forEach(token => {
+            //             newInput += writeToken(token)
+            //         })
+            //         setInput(newInput)
+            //     }
+            // }
 
-            parsedTokens.forEach(parsedToken => {
-                addWriteFunction(parsedToken)
-            })
+            // parsedTokens.forEach(parsedToken => {
+            //     addWriteFunction(parsedToken)
+            // })
         }
 
     }, [input])
@@ -55,7 +55,9 @@ function Editor() {
         <div>
             <textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                        setInput(e.target.value)
+                }}
             />
 
             <div ref={mathRef}>

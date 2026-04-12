@@ -3,7 +3,7 @@
 // Token Class
 // Token object holds variables, and contains functionality for input
 
-import { identifySymbol } from "./symbolIdentifier.jsx"
+// import { identifySymbol } from "./symbolIdentifier.jsx"
 
 export default class Token {
 
@@ -13,7 +13,7 @@ export default class Token {
         this.stringValue = stringValue
 
         // Get identified value
-        this.identifyText = identifySymbol(stringValue)
+        // this.identifyText = identifySymbol(stringValue)
 
         this.tokenType = tokenType
         
