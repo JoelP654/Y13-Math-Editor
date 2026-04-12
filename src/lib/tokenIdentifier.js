@@ -59,7 +59,6 @@ export const identifyTokens = (katexHtml, tokens) => {
                 "span": span
             })
     })
-    var unfoundTokens = []
 
     // Inner function just identifies one token
     // This allows recursion for child tokens
@@ -73,7 +72,6 @@ export const identifyTokens = (katexHtml, tokens) => {
         }
 
         // Split tokens characters - USING identifyText
-        console.log(token.identifyText)
         var tokenChars = token.identifyText ? token.identifyText.split("") : []
 
         var tokenFound = false
@@ -120,11 +118,6 @@ export const identifyTokens = (katexHtml, tokens) => {
             }
 
         }
-
-        // If a token wasn't found, add it to the list of unfound tokens
-        if (!tokenFound) {
-            unfoundTokens.push(token)
-        } 
     }
 
 
@@ -132,22 +125,6 @@ export const identifyTokens = (katexHtml, tokens) => {
     tokens.forEach(token => {
         identifyToken(token)
     })
-
-
-    // If characters weren't found
-    if (unfoundTokens.length > 0) {
-        var foundIndex = 0
-        
-        // For each mathChar, associate unfound token with char
-        mathChars.forEach(char => {
-            if (char.char != "") {
-                char.char = ""
-                unfoundTokens[foundIndex].htmlSpans.push(char.span)
-                unfoundTokens[foundIndex].updateSpans()
-                foundIndex += 1
-            }
-        })
-    }
 
     return tokens
 

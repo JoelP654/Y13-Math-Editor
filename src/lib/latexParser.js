@@ -67,18 +67,21 @@ const parseChunk = (input) => {
     var braceBuffer = [] // Buffer for string inside braces
     var inSlash = false
     var inChar = false
+    var tokenIndex = 1
+
 
     // This function takes whats in a buffer and creates a token for it
     const writeScanBuffer = () => {
         if (scanBuffer.length > 0) {
-            tokens.push(new Token(scanBuffer.join(""), "expression"))
+            tokens.push(new Token(scanBuffer.join(""), tokenIndex))
+            tokenIndex += 1
         }
         scanBuffer = []
     }
     const writeChild = (string) => {
         if (string.length > 0) {
-            console.log("DFGH " + tokens[tokens.length - 1].stringValue)
-            tokens[tokens.length - 1].children.push(new Token(string, "expression"))
+            tokens[tokens.length - 1].children.push(new Token(string, tokenIndex))
+            tokenIndex += 1
         }
     }
 
@@ -104,7 +107,7 @@ const parseChunk = (input) => {
             }
             
             if ("\\".includes(input[i])) { writeScanBuffer(); inSlash = true }
-            console.log(input[i] + inSlash)
+
             if ("^_".includes(input[i])) {
                 writeScanBuffer()
                 scanBuffer.push(input[i])

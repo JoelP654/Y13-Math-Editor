@@ -3,24 +3,25 @@
 // Token Class
 // Token object holds variables, and contains functionality for input
 
-// import { identifySymbol } from "./symbolIdentifier.jsx"
+import { identifySymbol } from "./symbolIdentifier.jsx"
 
 export default class Token {
 
     // On class init, setup variables
-    constructor(stringValue, tokenType, children) {
+    constructor(stringValue, tokenIndex, children) {
 
         this.stringValue = stringValue
 
         // Get identified value
-        // this.identifyText = identifySymbol(stringValue)
+        this.identifyText = identifySymbol(stringValue)
 
-        this.tokenType = tokenType
+        this.tokenIndex = tokenIndex
         
         if (children) {this.children = children}
         else {this.children = []}
         
         this.htmlSpans = []
+        this.setFocusIndex = () => {}
     }
 
     // When spans are received, this function is called
@@ -66,9 +67,11 @@ export default class Token {
         })
         this.boxDiv.addEventListener("focus", () => {
             this.boxDiv.classList.add("focused-box")
+            this.setFocusIndex(this.tokenIndex)
         })
         this.boxDiv.addEventListener("blur", () => {
             this.boxDiv.classList.remove("focused-box")
+            // this.setFocusIndex(0)
         })
 
         // On keypress for the input div
