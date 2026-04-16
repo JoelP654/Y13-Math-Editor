@@ -8,13 +8,13 @@ import { identifySymbol } from "./symbolIdentifier.jsx"
 export default class Token {
 
     // On class init, setup variables
-    constructor(stringValue, tokenIndex, children) {
+    constructor(stringValue, tokenIndex, type, children) {
 
         this.stringValue = stringValue
 
         // Get identified value
         this.identifyText = identifySymbol(stringValue)
-
+        this.tokenType = type
         this.tokenIndex = tokenIndex
         
         if (children) {this.children = children}
@@ -27,7 +27,6 @@ export default class Token {
     // When spans are received, this function is called
     // It sets up the input
     updateSpans() {
-
 
         // Calculate bounding box, maxX and so on
         var maxX = -Infinity
@@ -58,6 +57,12 @@ export default class Token {
         // This means the input box can be tabbed to
         this.boxDiv.tabIndex = -1
 
+
+        if (this.tokenType == "empty") {
+            this.boxDiv.classList.add("empty-box")
+        }
+
+
         // For each event, add a listener to add or remove class for styling
         this.boxDiv.addEventListener("mouseenter", () => {
             this.boxDiv.classList.add("hovered-box")
@@ -71,7 +76,7 @@ export default class Token {
         })
         this.boxDiv.addEventListener("blur", () => {
             this.boxDiv.classList.remove("focused-box")
-            // this.setFocusIndex(0)
+            this.setFocusIndex(0)
         })
 
         // On keypress for the input div
@@ -82,11 +87,22 @@ export default class Token {
                 this.stringValue = this.stringValue.slice(0, -1)
                 this.writeAll()
             }
+            if (key == "ArrowRight" || key == "ArrowDown") { this.setFocusIndex(this.tokenIndex + 1) }
+            if (key == "ArrowLeft" || key == "ArrowUp") { this.setFocusIndex(this.tokenIndex - 1) }
+
 
             // If the key is a character (length 1), add the character
             if (key.length === 1) {
-                this.stringValue += key
-                this.writeAll()
+                if (this.tokenType == "math") {
+                    this.stringValue += key
+                    this.writeAll()
+                }
+                else if (this.tokenType == "empty") {
+                    this.stringValue = key
+                    this.tokenType = "math"
+                    this.writeAll()
+                }
+                
             }
 
             // Ensure no text has been added to the div

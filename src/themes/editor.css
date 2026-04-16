@@ -13,6 +13,14 @@
     border: 2px dotted black;
 }
 
+.empty-box {
+    border: 1px dotted black;
+    width: 7px !important;
+    height: 7px !important;
+    margin-left: -1px !important;
+    margin-top: 2px !important;
+}
+
 .focused-box {
     caret-color: transparent;
     outline: none;

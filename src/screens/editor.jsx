@@ -8,13 +8,18 @@ import { writeToken } from "../lib/latexWriter"
 function Editor() {
 
     const [input, setInput] = useState("")
+    const [inputWithEmpty, setInputWithEmpty] = useState("")
     const [focusIndex, setFocusIndex] = useState(0)
     const mathRef = useRef(null)
 
-
-
     useEffect(() => {
         const parsedTokens = parseLatex(input)
+
+        var newInputWithEmpty = ""
+        parsedTokens.forEach(token => {
+            newInputWithEmpty += writeToken(token, true)
+        })
+        setInputWithEmpty(newInputWithEmpty)
 
         var html = mathRef.current
         if (!html.querySelector(".katex-error")) {
@@ -25,7 +30,7 @@ function Editor() {
 
             
             identifyTokens(katexHtml, parsedTokens)
-            // console.log(parsedTokens)
+            console.log(parsedTokens)
 
 
             const addWriteFunction = (token) => {
@@ -39,7 +44,7 @@ function Editor() {
                 token.writeAll = () => {
                     var newInput = ""
                     parsedTokens.forEach(token => {
-                        newInput += writeToken(token)
+                        newInput += writeToken(token, false)
                     })
                     setInput(newInput)
                 }
@@ -48,13 +53,15 @@ function Editor() {
             parsedTokens.forEach(parsedToken => {
                 addWriteFunction(parsedToken)
                 parsedToken.setFocusIndex = (newIndex) => {setFocusIndex(newIndex)}
-                if (parsedToken.tokenIndex == focusIndex) {
-                    parsedToken.boxDiv.classList.add("focused-box")
-                    parsedToken.boxDiv.focus()
-                }
-                else {
-                    parsedToken.boxDiv.classList.remove("focused-box")
-                    parsedToken.boxDiv.blur()
+                if (parsedToken.boxDiv) {
+                    if (parsedToken.tokenIndex == focusIndex) {
+                        parsedToken.boxDiv.classList.add("focused-box")
+                        parsedToken.boxDiv.focus()
+                    }
+                    else {
+                        parsedToken.boxDiv.classList.remove("focused-box")
+                        parsedToken.boxDiv.blur()
+                    }
                 }
             })
         }
@@ -71,7 +78,7 @@ function Editor() {
             />
 
             <div ref={mathRef}>
-                <BlockMath math={input}/>
+                <BlockMath math={inputWithEmpty}/>
             </div>
 
             <div id="bBox-container"/>

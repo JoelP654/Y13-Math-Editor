@@ -73,14 +73,14 @@ const parseChunk = (input) => {
     // This function takes whats in a buffer and creates a token for it
     const writeScanBuffer = () => {
         if (scanBuffer.length > 0) {
-            tokens.push(new Token(scanBuffer.join(""), tokenIndex))
+            tokens.push(new Token(scanBuffer.join(""), tokenIndex, "math"))
             tokenIndex += 1
         }
         scanBuffer = []
     }
     const writeChild = (string) => {
         if (string.length > 0) {
-            tokens[tokens.length - 1].children.push(new Token(string, tokenIndex))
+            tokens[tokens.length - 1].children.push(new Token(string, tokenIndex, "math"))
             tokenIndex += 1
         }
     }
@@ -97,10 +97,18 @@ const parseChunk = (input) => {
         // Includes braces
         if (braceCount == 0) {
             if ("}]".includes(input[i])) {
-                parseChunk(braceBuffer.join("")).forEach((token) => {
+                if (braceBuffer.length == 0) {
+                    var token = new Token("\\phantom{o}", tokenIndex, "empty")
                     if (inSlash || inChar) { tokens[tokens.length - 1].children.push(token) }
                     else { tokens.push(token) }
-                })
+                    tokenIndex += 1
+                }
+                else {
+                    parseChunk(braceBuffer.join("")).forEach((token) => {
+                        if (inSlash || inChar) { tokens[tokens.length - 1].children.push(token) }
+                        else { tokens.push(token) }
+                    })
+                }
                 inChar = false
                 braceBuffer = []
                 continue
@@ -164,7 +172,7 @@ export const parseLatex = (input) => {
 
         // If there is a comment which exists, create a comment token
         if (result.comment != "") {
-            tokens.push(new Token(result.comment, "comment"))
+            tokens.push(new Token(result.comment, 0, "comment"))
         }
     })
 
