@@ -10,10 +10,12 @@ function Editor() {
     const [input, setInput] = useState("")
     const [inputWithEmpty, setInputWithEmpty] = useState("")
     const [focusIndex, setFocusIndex] = useState(0)
+    const [tokens, setTokens] = useState([])
     const mathRef = useRef(null)
 
     useEffect(() => {
         const parsedTokens = parseLatex(input)
+        setTokens(parsedTokens)
 
         var newInputWithEmpty = ""
         parsedTokens.forEach(token => {
@@ -21,52 +23,67 @@ function Editor() {
         })
         setInputWithEmpty(newInputWithEmpty)
 
+    }, [input])
+
+
+
+    useEffect(() => {
+
         var html = mathRef.current
         if (!html.querySelector(".katex-error")) {
-            var katexHtml = html.querySelector(".katex-html")
 
-            // Empty bbox container
+            var katexHtml = html.querySelector(".katex-html")
             document.getElementById("bBox-container").replaceChildren()
 
             
-            identifyTokens(katexHtml, parsedTokens)
-            console.log(parsedTokens)
-
+            identifyTokens(katexHtml, tokens)
+            console.log(tokens)
 
             const addWriteFunction = (token) => {
 
+                // Add write function to all children
                 if (token.children.length > 0) {
                     token.children.forEach(child => {
                         addWriteFunction(child)
                     })
                 }
 
+                // Write all rewrites all tokens
                 token.writeAll = () => {
                     var newInput = ""
-                    parsedTokens.forEach(token => {
+                    tokens.forEach(token => {
                         newInput += writeToken(token, false)
                     })
                     setInput(newInput)
                 }
             }
 
-            parsedTokens.forEach(parsedToken => {
-                addWriteFunction(parsedToken)
-                parsedToken.setFocusIndex = (newIndex) => {setFocusIndex(newIndex)}
-                if (parsedToken.boxDiv) {
-                    if (parsedToken.tokenIndex == focusIndex) {
-                        parsedToken.boxDiv.classList.add("focused-box")
-                        parsedToken.boxDiv.focus()
-                    }
-                    else {
-                        parsedToken.boxDiv.classList.remove("focused-box")
-                        parsedToken.boxDiv.blur()
-                    }
-                }
+            // Apply functions to each token
+            tokens.forEach(token => {
+                addWriteFunction(token)
+                token.setFocusIndex = (newIndex) => { setFocusIndex(newIndex) }
             })
-        }
 
-    }, [input, focusIndex])
+        }
+    }, [tokens, inputWithEmpty])
+
+
+
+    useEffect(() => {
+        tokens.forEach(token => {
+            if (token.boxDiv) {
+                if (token.tokenIndex == focusIndex) {
+                    token.boxDiv.classList.add("focused-box")
+                    token.boxDiv.focus()
+                }
+                else {
+                    token.boxDiv.classList.remove("focused-box")
+                    token.boxDiv.blur()
+                }
+            }
+        })
+    }, [tokens, focusIndex])
+
 
     return (
         <div>

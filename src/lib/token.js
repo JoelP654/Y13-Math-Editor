@@ -84,8 +84,18 @@ export default class Token {
 
             // If backspace, remove last character of string
             if (key == "Backspace") {
-                this.stringValue = this.stringValue.slice(0, -1)
+
+                if (this.stringValue.length > 1) {
+                    this.stringValue = this.stringValue.slice(0, -1)
+                }
+                else {
+                    this.stringValue = "\\phantom{o}"
+                    this.tokenType = "empty"
+                }
+
                 this.writeAll()
+
+                
             }
             if (key == "ArrowRight" || key == "ArrowDown") { this.setFocusIndex(this.tokenIndex + 1) }
             if (key == "ArrowLeft" || key == "ArrowUp") { this.setFocusIndex(this.tokenIndex - 1) }
