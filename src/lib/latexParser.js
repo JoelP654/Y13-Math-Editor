@@ -60,7 +60,7 @@ const parseComment = (input) => {
 // This function scans left to right, using buffers to hold values until a break is detected
 // It then creates a token for whats in the buffer
 // If brackets are detected, it doesn't try parse whats in them, just gets the string then parses the string
-const parseChunk = (input) => {
+const parseChunk = (input, startIndex, incrementIndex) => {
     var tokens = [] // Array of tokens
     var scanBuffer = [] // Buffer for scanning
     var braceCount = 0 // Count of open braces, should never be negative
@@ -68,20 +68,24 @@ const parseChunk = (input) => {
     var inSlash = false
     var inChar = false
     var tokenIndex = 1
+    var increment = () => { tokenIndex += 1}
 
+    if (startIndex) {tokenIndex = startIndex}
+
+    if (incrementIndex) { increment = incrementIndex }
 
     // This function takes whats in a buffer and creates a token for it
     const writeScanBuffer = () => {
         if (scanBuffer.length > 0) {
             tokens.push(new Token(scanBuffer.join(""), tokenIndex, "math"))
-            tokenIndex += 1
+            increment()
         }
         scanBuffer = []
     }
     const writeChild = (string) => {
         if (string.length > 0) {
             tokens[tokens.length - 1].children.push(new Token(string, tokenIndex, "math"))
-            tokenIndex += 1
+            increment()
         }
     }
 
@@ -101,10 +105,10 @@ const parseChunk = (input) => {
                     var token = new Token("\\phantom{o}", tokenIndex, "empty")
                     if (inSlash || inChar) { tokens[tokens.length - 1].children.push(token) }
                     else { tokens.push(token) }
-                    tokenIndex += 1
+                    increment()
                 }
                 else {
-                    parseChunk(braceBuffer.join("")).forEach((token) => {
+                    parseChunk(braceBuffer.join(""), tokenIndex, () => { tokenIndex += 1 }).forEach((token) => {
                         if (inSlash || inChar) { tokens[tokens.length - 1].children.push(token) }
                         else { tokens.push(token) }
                     })

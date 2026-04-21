@@ -1,0 +1,25 @@
+.buttonTab {
+    display: block;
+    width: 100%;
+}
+.tabSelector {
+    display: flex;
+    width: 100%;
+    background-color: lightgrey;
+    padding: 2px;
+    border: 1px solid black;
+}
+.buttonBar {
+    display: flex;
+    width: 100%;
+}
+.expressionButton {
+    border: 2px dotted lightgrey;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+}
+.dropDown {
+    position: absolute;
+    padding: 0px;
+}

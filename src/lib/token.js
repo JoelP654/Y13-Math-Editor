@@ -22,6 +22,22 @@ export default class Token {
         
         this.htmlSpans = []
         this.setFocusIndex = () => {}
+
+        this.getFocus = (index) => {
+            if (this.children.length > 0) {
+                this.children.forEach(child => { child.getFocus(index) })
+            }
+            if (this.boxDiv) {
+                if (this.tokenIndex == index) {
+                    this.boxDiv.classList.add("focused-box")
+                    this.boxDiv.focus()
+                }
+                else {
+                    this.boxDiv.classList.remove("focused-box")
+                    this.boxDiv.blur()
+                }
+            }
+        }
     }
 
     // When spans are received, this function is called
@@ -46,6 +62,8 @@ export default class Token {
         // Create input box
         this.boxDiv = document.createElement("div")
         this.boxDiv.classList.add("math-box")
+        // this.boxDiv.contentEditable = true
+        // this.boxDiv.innerText = this.identifyText
 
         // Position box according to bbox
         this.boxDiv.style.position = "fixed"
@@ -57,11 +75,9 @@ export default class Token {
         // This means the input box can be tabbed to
         this.boxDiv.tabIndex = -1
 
-
         if (this.tokenType == "empty") {
             this.boxDiv.classList.add("empty-box")
         }
-
 
         // For each event, add a listener to add or remove class for styling
         this.boxDiv.addEventListener("mouseenter", () => {
@@ -76,7 +92,7 @@ export default class Token {
         })
         this.boxDiv.addEventListener("blur", () => {
             this.boxDiv.classList.remove("focused-box")
-            this.setFocusIndex(0)
+            // this.setFocusIndex(0)
         })
 
         // On keypress for the input div
@@ -95,8 +111,8 @@ export default class Token {
 
                 this.writeAll()
 
-                
             }
+
             if (key == "ArrowRight" || key == "ArrowDown") { this.setFocusIndex(this.tokenIndex + 1) }
             if (key == "ArrowLeft" || key == "ArrowUp") { this.setFocusIndex(this.tokenIndex - 1) }
 

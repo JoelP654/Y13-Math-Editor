@@ -5,6 +5,7 @@ import { parseLatex } from "../lib/latexParser"
 import { identifyTokens } from "../lib/tokenIdentifier"
 import "../themes/editor.css"
 import { writeToken } from "../lib/latexWriter"
+import { Buttons } from "../components/expressionButtons"
 function Editor() {
 
     const [input, setInput] = useState("")
@@ -35,7 +36,6 @@ function Editor() {
             var katexHtml = html.querySelector(".katex-html")
             document.getElementById("bBox-container").replaceChildren()
 
-            
             identifyTokens(katexHtml, tokens)
             console.log(tokens)
 
@@ -70,18 +70,7 @@ function Editor() {
 
 
     useEffect(() => {
-        tokens.forEach(token => {
-            if (token.boxDiv) {
-                if (token.tokenIndex == focusIndex) {
-                    token.boxDiv.classList.add("focused-box")
-                    token.boxDiv.focus()
-                }
-                else {
-                    token.boxDiv.classList.remove("focused-box")
-                    token.boxDiv.blur()
-                }
-            }
-        })
+        tokens.forEach(token => { token.getFocus(focusIndex) })
     }, [tokens, focusIndex])
 
 
@@ -94,11 +83,14 @@ function Editor() {
                 }}
             />
 
-            <div ref={mathRef}>
-                <BlockMath math={inputWithEmpty}/>
-            </div>
+            <div className="workArea">
+                <Buttons/>
+                <div ref={mathRef}>
+                    <BlockMath math={inputWithEmpty}/>
+                </div>
 
-            <div id="bBox-container"/>
+                <div id="bBox-container"/>
+            </div>
 
         </div>
     )

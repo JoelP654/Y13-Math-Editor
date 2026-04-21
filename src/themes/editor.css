@@ -7,6 +7,7 @@
     margin-left: -3px;
     margin-top: -3px;
     cursor: text;
+    pointer-events: auto;
 }
 
 .hovered-box {
@@ -17,13 +18,15 @@
     border: 1px dotted black;
     width: 7px !important;
     height: 7px !important;
-    margin-left: -1px !important;
-    margin-top: 2px !important;
+    margin-left: 0px !important;
+    margin-top: 3px !important;
 }
 
 .focused-box {
-    caret-color: transparent;
     outline: none;
     box-shadow: none;
     border: 2px solid black;
+    color: transparent;
+    caret-color: black;
+    font-size: 19px;
 }
