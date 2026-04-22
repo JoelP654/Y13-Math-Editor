@@ -5,19 +5,19 @@ import { BlockMath } from "react-katex"
 import "../themes/buttons.css"
 import buttonData from "../lib/buttonData.json"
 
-export function ExpressionButton({ string }) {
+export function ExpressionButton({ string, write }) {
     var token = parseLatex(string)
     var latex = writeToken(token[0])
     return (
         <button 
             className="expressionButton"
-            onClick={() => {console.log("WRITING " + string)}}>
+            onClick={() => { write(string) }}>
             <BlockMath math={latex}/>
         </button>
     )
 }
 
-export function ButtonDropDown({ dropDownObject }) {
+export function ButtonDropDown({ dropDownObject, write }) {
     const [hovered, setHovered] = useState(false)
     const [dropDownHovered, setDropDownHovered] = useState(false)
     return (
@@ -28,7 +28,10 @@ export function ButtonDropDown({ dropDownObject }) {
                 onMouseLeave={() => {setHovered(false)}}
             >
                 <div className="expressionButton">
-                    <BlockMath math={writeToken(parseLatex(dropDownObject.dropDownCover)[0])} />
+                    <BlockMath
+                        math={writeToken(parseLatex(dropDownObject.dropDownCover)[0])}
+                        write={write}
+                    />
                     {dropDownObject.dropDownTitle}
                 </div>
                 
@@ -40,7 +43,7 @@ export function ButtonDropDown({ dropDownObject }) {
                 onMouseLeave={() => {setDropDownHovered(false)}}
             >
                 {(hovered || dropDownHovered) && dropDownObject.items.map((object, index) => (
-                    <ExpressionButton key={index} string={object} />
+                    <ExpressionButton key={index} string={object} write={write}/>
                 ))}
             </div>
             
@@ -48,24 +51,23 @@ export function ButtonDropDown({ dropDownObject }) {
     )
 }
 
-export function ButtonBar({ barObjects }) {
+export function ButtonBar({ barObjects, write }) {
     return (
         <div className="buttonBar">
             {console.log(barObjects)}
             {barObjects.map((object, index) => (
                 typeof object == "string"
-                    ? <ExpressionButton key={index} string={object}/>
-                    : <ButtonDropDown key={index} dropDownObject={object}/>
+                    ? <ExpressionButton key={index} string={object} write={write}/>
+                    : <ButtonDropDown key={index} dropDownObject={object} write={write}/>
                 
             ))}
         </div>
     )
 }
 
-export function Buttons() {
+export function Buttons({ write }) {
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = buttonData.tabs
-    console.log(tabs)
     return (
         <div className="buttonTab">
             <div className="tabSelector">
@@ -79,7 +81,7 @@ export function Buttons() {
                     </button>
                 ))}
             </div>
-            <ButtonBar barObjects={tabs[tabIndex].barElements}/>
+            <ButtonBar barObjects={tabs[tabIndex].barElements} write={write}/>
         </div>
     )
 }

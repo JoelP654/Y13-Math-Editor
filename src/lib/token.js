@@ -38,6 +38,24 @@ export default class Token {
                 }
             }
         }
+
+        this.write = (string, fromButton) => {
+            
+            if (this.tokenType == "math") {
+                console.log(fromButton + " " + this.stringValue[0])
+                if (fromButton && this.stringValue[0] == "\\") {
+                    
+                    this.stringValue += " "
+                }
+                this.stringValue += string
+                this.writeAll()
+            }
+            else if (this.tokenType == "empty") {
+                this.stringValue = string
+                this.tokenType = "math"
+                this.writeAll()
+            }
+        }
     }
 
     // When spans are received, this function is called
@@ -103,6 +121,10 @@ export default class Token {
 
                 if (this.stringValue.length > 1) {
                     this.stringValue = this.stringValue.slice(0, -1)
+                    if (this.stringValue == "\\") {
+                        this.stringValue = ""
+                        this.children = []
+                    }
                 }
                 else {
                     this.stringValue = "\\phantom{o}"
@@ -119,16 +141,7 @@ export default class Token {
 
             // If the key is a character (length 1), add the character
             if (key.length === 1) {
-                if (this.tokenType == "math") {
-                    this.stringValue += key
-                    this.writeAll()
-                }
-                else if (this.tokenType == "empty") {
-                    this.stringValue = key
-                    this.tokenType = "math"
-                    this.writeAll()
-                }
-                
+                this.write(key, false)
             }
 
             // Ensure no text has been added to the div

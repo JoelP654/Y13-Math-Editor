@@ -84,7 +84,21 @@ function Editor() {
             />
 
             <div className="workArea">
-                <Buttons/>
+                <Buttons write={(string) => {
+                    if (focusIndex == 0) {
+                        tokens[tokens.length - 1].write(string, true)
+                    }
+                    else {
+                        tokens.forEach(token => {
+                            if (token.tokenIndex == focusIndex) {
+                                token.write(string, true)
+                                setFocusIndex(0)
+                            }
+                        })
+                    }
+                    
+
+                }}/>
                 <div ref={mathRef}>
                     <BlockMath math={inputWithEmpty}/>
                 </div>
