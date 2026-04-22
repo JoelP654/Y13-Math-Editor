@@ -2,29 +2,67 @@
     "tabs":
     [
         {
-            "tabTitle": "TAB 1",
+            "tabTitle": "Math",
             "barElements": [
-                "\\pi",
-                "\\sum_{}^{}",
+                "+","-","*","/",
                 {
-                    "dropDownTitle": "Operators",
-                    "dropDownCover": "+-",
+                    "dropDownTitle": "Delimiters",
+                    "dropDownCover": "\\lbrace {}\\rbrace",
                     "items": [
-                        "+","-","*","/"
+                        "({})",
+                        "\\lbrack {}\\rbrack",
+                        "\\lbrace {}\\rbrace",
+                        "⟨{}⟩",
+                        "|{}|",
+                        "\\|{}\\|",
+                        "\\lBrace {}\\rBrace",
+                        "\\llbracket {}\\rrbracket",
+                        "⌈{}⌉",
+                        "⌊{}⌋",
+                        "⎰{}⎱",
+                        "⟮{}⟯",
+                        "┌{}┐",
+                        "└{}┘",
+                        "\\uparrow",
+                        "\\downarrow",
+                        "\\updownarrow",
+                        "\\Uparrow",
+                        "\\Downarrow",
+                        "\\Updownarrow"
                     ]
-                }
+                },
+                "{}^{}","{}_{}","{}\\over{}"
             ]
         },
         {
-            "tabTitle": "TAB 2",
+            "tabTitle": "Symbols",
             "barElements": [
-                "\\delta",
-                "\\Delta",
                 {
-                    "dropDownTitle": "Numbers",
-                    "dropDownCover": "123",
+                    "dropDownTitle": "Lower case Greek",
+                    "dropDownCover": "αβ",
                     "items": [
-                        "0","1","2","3","4","5","6","7","8","9"
+                        "α","β","γ","δ","ϵ","ζ","η","θ","ι","κ","λ","μ","ν","ξ","o","π","ρ","σ","τ","υ","ϕ","χ","ψ","ω"
+                    ]
+                },
+                {
+                    "dropDownTitle": "Upper Case Greek",
+                    "dropDownCover": "ΔΘ",
+                    "items": [
+                        "A","B","Γ","Δ","E","Z","H","Θ","I","K","Λ","M","N","Ξ","O","Π","P","Σ","T","Υ","Φ","X","Ψ","Ω"
+                    ]
+                },
+                {
+                    "dropDownTitle": "Number Sets",
+                    "dropDownCover": "\\Complex\\Z",
+                    "items": [
+                        "\\Complex","\\N","\\R","\\Z"
+                    ]
+                },
+                {
+                    "dropDownTitle": "Other",
+                    "dropDownCover": "\\imath ∂",
+                    "items": [
+                        "\\imath","\\jmath","ℵ","ℶ","ℷ","ℸ","∇","\\partial"
                     ]
                 }
             ]

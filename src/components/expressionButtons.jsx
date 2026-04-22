@@ -1,18 +1,23 @@
 import { useState } from "react"
-import { parseLatex } from "../lib/latexParser"
-import { writeToken } from "../lib/latexWriter"
 import { BlockMath } from "react-katex"
 import "../themes/buttons.css"
 import buttonData from "../lib/buttonData.json"
 
+
+const addEmpty = (string) => {
+    return string.split("{").join("{\\phantom{o}")
+}
+
 export function ExpressionButton({ string, write }) {
-    var token = parseLatex(string)
-    var latex = writeToken(token[0])
+    let latex = addEmpty(string)
+    
+
     return (
         <button 
             className="expressionButton"
             onClick={() => { write(string) }}>
             <BlockMath math={latex}/>
+            
         </button>
     )
 }
@@ -20,6 +25,8 @@ export function ExpressionButton({ string, write }) {
 export function ButtonDropDown({ dropDownObject, write }) {
     const [hovered, setHovered] = useState(false)
     const [dropDownHovered, setDropDownHovered] = useState(false)
+    var latex = dropDownObject.dropDownCover
+
     return (
         <div className="buttonDropDown">
             <div
@@ -29,10 +36,11 @@ export function ButtonDropDown({ dropDownObject, write }) {
             >
                 <div className="expressionButton">
                     <BlockMath
-                        math={writeToken(parseLatex(dropDownObject.dropDownCover)[0])}
+                        math={latex}
                         write={write}
                     />
                     {dropDownObject.dropDownTitle}
+                    <div className="downArrow">⌄</div>
                 </div>
                 
             </div>
@@ -54,7 +62,6 @@ export function ButtonDropDown({ dropDownObject, write }) {
 export function ButtonBar({ barObjects, write }) {
     return (
         <div className="buttonBar">
-            {console.log(barObjects)}
             {barObjects.map((object, index) => (
                 typeof object == "string"
                     ? <ExpressionButton key={index} string={object} write={write}/>

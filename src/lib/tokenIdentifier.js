@@ -110,7 +110,7 @@ export const identifyTokens = (katexHtml, tokens) => {
                     }
 
                     // Update spans - function in class
-                    token.updateSpans()
+                    token.updateSpans(true)
                 }
 
                 })

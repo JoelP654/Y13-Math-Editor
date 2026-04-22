@@ -42,7 +42,6 @@ export default class Token {
         this.write = (string, fromButton) => {
             
             if (this.tokenType == "math") {
-                console.log(fromButton + " " + this.stringValue[0])
                 if (fromButton && this.stringValue[0] == "\\") {
                     
                     this.stringValue += " "
@@ -60,7 +59,7 @@ export default class Token {
 
     // When spans are received, this function is called
     // It sets up the input
-    updateSpans() {
+    updateSpans(handleEvents) {
 
         // Calculate bounding box, maxX and so on
         var maxX = -Infinity
@@ -97,60 +96,62 @@ export default class Token {
             this.boxDiv.classList.add("empty-box")
         }
 
-        // For each event, add a listener to add or remove class for styling
-        this.boxDiv.addEventListener("mouseenter", () => {
-            this.boxDiv.classList.add("hovered-box")
-        })
-        this.boxDiv.addEventListener("mouseleave", () => {
-            this.boxDiv.classList.remove("hovered-box")
-        })
-        this.boxDiv.addEventListener("focus", () => {
-            this.boxDiv.classList.add("focused-box")
-            this.setFocusIndex(this.tokenIndex)
-        })
-        this.boxDiv.addEventListener("blur", () => {
-            this.boxDiv.classList.remove("focused-box")
-            // this.setFocusIndex(0)
-        })
+        if (handleEvents) {
+            // For each event, add a listener to add or remove class for styling
+            this.boxDiv.addEventListener("mouseenter", () => {
+                this.boxDiv.classList.add("hovered-box")
+            })
+            this.boxDiv.addEventListener("mouseleave", () => {
+                this.boxDiv.classList.remove("hovered-box")
+            })
+            this.boxDiv.addEventListener("focus", () => {
+                this.boxDiv.classList.add("focused-box")
+                this.setFocusIndex(this.tokenIndex)
+            })
+            this.boxDiv.addEventListener("blur", () => {
+                this.boxDiv.classList.remove("focused-box")
+                // this.setFocusIndex(0)
+            })
 
-        // On keypress for the input div
-        this.boxDiv.addEventListener("keydown", ({key}) => {
+            // On keypress for the input div
+            this.boxDiv.addEventListener("keydown", ({key}) => {
 
-            // If backspace, remove last character of string
-            if (key == "Backspace") {
+                // If backspace, remove last character of string
+                if (key == "Backspace") {
 
-                if (this.stringValue.length > 1) {
-                    this.stringValue = this.stringValue.slice(0, -1)
-                    if (this.stringValue == "\\") {
-                        this.stringValue = ""
-                        this.children = []
+                    if (this.stringValue.length > 1) {
+                        this.stringValue = this.stringValue.slice(0, -1)
+                        if (this.stringValue == "\\") {
+                            this.stringValue = ""
+                            this.children = []
+                        }
                     }
+                    else {
+                        this.stringValue = "\\phantom{o}"
+                        this.tokenType = "empty"
+                    }
+
+                    this.writeAll()
+
                 }
-                else {
-                    this.stringValue = "\\phantom{o}"
-                    this.tokenType = "empty"
+
+                if (key == "ArrowRight" || key == "ArrowDown") { this.setFocusIndex(this.tokenIndex + 1) }
+                if (key == "ArrowLeft" || key == "ArrowUp") { this.setFocusIndex(this.tokenIndex - 1) }
+
+
+                // If the key is a character (length 1), add the character
+                if (key.length === 1) {
+                    this.write(key, false)
                 }
 
-                this.writeAll()
+                // Ensure no text has been added to the div
+                this.boxDiv.innerText = ""
 
-            }
+            })
 
-            if (key == "ArrowRight" || key == "ArrowDown") { this.setFocusIndex(this.tokenIndex + 1) }
-            if (key == "ArrowLeft" || key == "ArrowUp") { this.setFocusIndex(this.tokenIndex - 1) }
-
-
-            // If the key is a character (length 1), add the character
-            if (key.length === 1) {
-                this.write(key, false)
-            }
-
-            // Ensure no text has been added to the div
-            this.boxDiv.innerText = ""
-
-        })
-
-        // Add bbox to bbox container
-        document.getElementById("bBox-container").appendChild(this.boxDiv)
+            // Add bbox to bbox container
+            document.getElementById("bBox-container").appendChild(this.boxDiv)
+        }
     }
 
 }

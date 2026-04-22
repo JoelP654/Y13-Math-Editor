@@ -75,17 +75,13 @@ function Editor() {
 
 
     return (
-        <div>
-            <textarea
-                value={input}
-                onChange={(e) => {
-                        setInput(e.target.value)
-                }}
-            />
-
+        <div className="editor">
             <div className="workArea">
                 <Buttons write={(string) => {
-                    if (focusIndex == 0) {
+                    if (tokens.length == 0) {
+                        setInput(string)
+                    }
+                    else if (focusIndex == 0) {
                         tokens[tokens.length - 1].write(string, true)
                     }
                     else {
@@ -104,6 +100,14 @@ function Editor() {
                 </div>
 
                 <div id="bBox-container"/>
+
+                <textarea
+                    className="textInput"
+                    value={input}
+                    onChange={(e) => {
+                            setInput(e.target.value)
+                    }}
+                    />
             </div>
 
         </div>

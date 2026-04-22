@@ -2,6 +2,25 @@
     pointer-events: none;
 }
 
+html, body, .root, .editor {
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+
+.editor {
+    height: 100%;
+    padding: 10px;
+}
+
+.workArea {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
 .math-box {
     padding: 1px;
     margin-left: -3px;
@@ -29,4 +48,9 @@
     color: transparent;
     caret-color: black;
     font-size: 19px;
+}
+
+.textInput {
+    margin-bottom: 20px;
+    height: 100px;
 }
