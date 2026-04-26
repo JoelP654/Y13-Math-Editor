@@ -4,7 +4,6 @@
 // This script looks at at the HTML code and tokens, and matches them up
 
 export const identifyTokens = (katexHtml, tokens) => {
-
     // Get all spans
     var htmlSpans = katexHtml.querySelectorAll("span")
 
@@ -110,7 +109,7 @@ export const identifyTokens = (katexHtml, tokens) => {
                     }
 
                     // Update spans - function in class
-                    token.updateSpans(true)
+                    token.updateSpans()
                 }
 
                 })

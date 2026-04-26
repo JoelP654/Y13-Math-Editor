@@ -36,17 +36,28 @@ function Editor() {
             var katexHtml = html.querySelector(".katex-html")
             document.getElementById("bBox-container").replaceChildren()
 
-            identifyTokens(katexHtml, tokens)
-            console.log(tokens)
 
-            const addWriteFunction = (token) => {
+            // Assign Token Indexes. Indexed so first token is highest value, each progressive token -= 1 index
+            var totalTokens = 0
+            const countTokens = (token) => {
+                totalTokens += 1
+                token.children.forEach(child => { countTokens(child) })
+            }
+            tokens.forEach(token => countTokens(token))
+            const assignIndexes = (token) => {
+                token.tokenIndex = totalTokens
+                totalTokens -= 1
+                token.children.forEach(child => { assignIndexes(child) })
+            }
+            tokens.forEach(token => assignIndexes(token))
+
+
+            identifyTokens(katexHtml, tokens)
+
+            const addFunctions = (token) => {
 
                 // Add write function to all children
-                if (token.children.length > 0) {
-                    token.children.forEach(child => {
-                        addWriteFunction(child)
-                    })
-                }
+                token.children.forEach(child => { addFunctions(child) })
 
                 // Write all rewrites all tokens
                 token.writeAll = () => {
@@ -56,13 +67,13 @@ function Editor() {
                     })
                     setInput(newInput)
                 }
+
+                // Set focus index changes the focus index
+                token.setFocusIndex = (newIndex) => { setFocusIndex(newIndex) }
             }
 
             // Apply functions to each token
-            tokens.forEach(token => {
-                addWriteFunction(token)
-                token.setFocusIndex = (newIndex) => { setFocusIndex(newIndex) }
-            })
+            tokens.forEach(token => { addFunctions(token) })
 
         }
     }, [tokens, inputWithEmpty])
@@ -88,7 +99,9 @@ function Editor() {
                         tokens.forEach(token => {
                             if (token.tokenIndex == focusIndex) {
                                 token.write(string, true)
-                                setFocusIndex(0)
+                                if (focusIndex + 1 > tokens.length) {
+                                    setFocusIndex(tokens.length)
+                                }
                             }
                         })
                     }
@@ -105,8 +118,9 @@ function Editor() {
                     className="textInput"
                     value={input}
                     onChange={(e) => {
-                            setInput(e.target.value)
+                        setInput(e.target.value)
                     }}
+                    onClick={() => {setFocusIndex(0)}}
                     />
             </div>
 
