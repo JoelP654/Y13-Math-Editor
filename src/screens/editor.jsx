@@ -6,12 +6,20 @@ import { identifyTokens } from "../lib/tokenIdentifier"
 import "../themes/editor.css"
 import { writeToken } from "../lib/latexWriter"
 import { Buttons } from "../components/expressionButtons"
+import { OpenSaveScreen, SaveScreen } from "../components/saveScreens"
+import { FaFolder } from "react-icons/fa"
+import { addSave } from "../lib/saveFunctions"
+
 function Editor() {
 
+    const [id, setId] = useState(0)
+    const [title, setTitle] = useState("")
     const [input, setInput] = useState("")
     const [inputWithEmpty, setInputWithEmpty] = useState("")
     const [focusIndex, setFocusIndex] = useState(0)
     const [tokens, setTokens] = useState([])
+    const [openingSave, setOpeningSave] = useState(false)
+    const [saving, setSaving] = useState(false)
     const mathRef = useRef(null)
 
     useEffect(() => {
@@ -87,6 +95,14 @@ function Editor() {
 
     return (
         <div className="editor">
+
+            <div className="topTab">
+                <FaFolder icon={"folder"} className="folderIcon" onClick={() => {setOpeningSave(true)}}/>
+                <div className="saveButton" onClick={() => {setSaving(true)}}>
+                    Save
+                </div>
+            </div>
+
             <div className="workArea">
                 <Buttons write={(string) => {
                     if (tokens.length == 0) {
@@ -124,6 +140,25 @@ function Editor() {
                     />
             </div>
 
+            {(openingSave || saving) &&
+                <div className="modalBackdrop">
+                    {openingSave
+                        ?
+                            <OpenSaveScreen
+                                close={() => {setOpeningSave(false)}}
+                                openSave={(id, title, input) => {setId(id); setTitle(title); setInput(input)}}
+                            />
+
+                        :
+                            <SaveScreen
+                                id={id}
+                                title={title}
+                                close={() => setSaving(false)}
+                                save={(saveTitle) => addSave(crypto.randomUUID(), saveTitle, input)}
+                            />
+                    }
+                </div>
+            }
         </div>
     )
 }
