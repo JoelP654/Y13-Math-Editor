@@ -57,8 +57,13 @@ export function OpenSaveScreen({ close, openSave }) {
     )
 }
 
-export function SaveScreen({ close, save }) {
-    const [title, setTitle] = useState("")
+export function SaveScreen({ close, save, title }) {
+    const [inputTitle, setInputTitle] = useState(title)
+    const [message, setMessage] = useState("")
+
+    useEffect(() => {
+        setInputTitle(title);
+    }, [title]);
 
     return (
         <div className="saveModal">
@@ -67,13 +72,26 @@ export function SaveScreen({ close, save }) {
                 <MdCancel icon={"cancel"} onClick={close}/>
             </div>
             <input
-                value={title}
+                value={inputTitle}
                 onChange={(e) => {
-                    setTitle(e.target.value)
+                    setInputTitle(e.target.value)
+                    setMessage("")
                 }}
             />
-            <div onClick={() => {save(title); close()}}>
+            <div onClick={() => {
+                if (inputTitle != "") {
+                    save(inputTitle)
+                    close()
+                }
+                else {
+                    setMessage("Enter a Valid Save Name")
+                }
+                
+            }}>
                 Save
+            </div>
+            <div>
+                {message}
             </div>
         </div>
     )

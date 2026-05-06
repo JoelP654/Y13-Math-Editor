@@ -97,6 +97,7 @@ function Editor() {
         <div className="editor">
 
             <div className="topTab">
+                {title}
                 <FaFolder icon={"folder"} className="folderIcon" onClick={() => {setOpeningSave(true)}}/>
                 <div className="saveButton" onClick={() => {setSaving(true)}}>
                     Save
@@ -151,10 +152,9 @@ function Editor() {
 
                         :
                             <SaveScreen
-                                id={id}
                                 title={title}
                                 close={() => setSaving(false)}
-                                save={(saveTitle) => addSave(crypto.randomUUID(), saveTitle, input)}
+                                save={(saveTitle) => addSave(id || crypto.randomUUID(), saveTitle, input)}
                             />
                     }
                 </div>
