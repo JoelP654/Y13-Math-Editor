@@ -4,7 +4,10 @@
         {
             "tabTitle": "Math",
             "barElements": [
-                "+","-","*","/",
+                "+","-","*","/","\\pm","\\mp",
+                "\\times","\\div","\\cdot","\\circ","\\bullet",
+                "{}^{}","{}_{}","{}\\over{}",
+                "\\sqrt{}","^{}\\sqrt{}",
                 {
                     "dropDownTitle": "Delimiters",
                     "dropDownCover": "\\lbrace {}\\rbrace",
@@ -22,7 +25,24 @@
                         "⎰{}⎱",
                         "⟮{}⟯",
                         "┌{}┐",
-                        "└{}┘",
+                        "└{}┘"
+                    ]
+                },
+                {
+                    "dropDownTitle": "Relations",
+                    "dropDownCover": "\\approx",
+                    "items": [
+                        "=","\\neq","<",">",
+                        "\\leq","\\geq",
+                        "\\approx","\\sim","\\simeq","\\equiv",
+                        "\\cong","\\propto",
+                        "\\parallel","\\perp"
+                    ]
+                },
+                {
+                    "dropDownTitle": "Arrows",
+                    "dropDownCover": "\\uparrow",
+                    "items": [
                         "\\uparrow",
                         "\\downarrow",
                         "\\updownarrow",
@@ -30,8 +50,7 @@
                         "\\Downarrow",
                         "\\Updownarrow"
                     ]
-                },
-                "{}^{}","{}_{}","{}\\over{}"
+                }
             ]
         },
         {
@@ -52,17 +71,112 @@
                     ]
                 },
                 {
-                    "dropDownTitle": "Number Sets",
-                    "dropDownCover": "\\Complex\\Z",
+                    "dropDownTitle": "Sets & Logic",
+                    "dropDownCover": "\\forall",
                     "items": [
-                        "\\Complex","\\N","\\R","\\Z"
+                        "\\forall","\\exists","\\nexists",
+                        "\\in","\\notin",
+                        "\\subset","\\subseteq",
+                        "\\supset","\\supseteq",
+                        "\\cup","\\cap",
+                        "\\bigcup","\\bigcap",
+                        "\\emptyset",
+                        "\\land","\\lor","\\neg",
+                        "\\implies","\\iff",
+                        "\\therefore","\\because"
+                    ]
+                },
+                {
+                    "dropDownTitle": "Number Sets",
+                    "dropDownCover": "\\R",
+                    "items": [
+                        "\\N",
+                        "\\Z",
+                        "\\mathbb{Q}",
+                        "\\R",
+                        "\\Complex"
                     ]
                 },
                 {
                     "dropDownTitle": "Other",
-                    "dropDownCover": "\\imath ∂",
+                    "dropDownCover": "\\aleph",
                     "items": [
-                        "\\imath","\\jmath","ℵ","ℶ","ℷ","ℸ","∇","\\partial"
+                        "\\aleph",
+                        "\\beth",
+                        "\\gimel",
+                        "\\daleth",
+                        "\\Re",
+                        "\\Im",
+                        "\\wp",
+                        "\\ell",
+                        "\\hbar",
+                        "\\nabla",
+                        "\\partial",
+                        "\\infty"
+                    ]
+                }
+            ]
+        },
+        {
+            "tabTitle": "Functions",
+            "icon": "ƒ",
+            "barElements": [
+                {
+                    "dropDownTitle": "Trigonometry",
+                    "dropDownCover": "\\sin",
+                    "items": [
+                        "\\sin{}","\\cos{}","\\tan{}",
+                        "\\csc{}","\\sec{}","\\cot{}",
+                        "\\arcsin{}","\\arccos{}","\\arctan{}",
+                        "\\sinh{}","\\cosh{}","\\tanh{}"
+                    ]
+                },
+                
+                {
+                    "dropDownTitle": "Calculus",
+                    "dropDownCover": "\\int",
+                    "items": [
+                        "\\int",
+                        "\\int_{}^{}",
+                        "\\iint",
+                        "\\iiint",
+                        "\\oint",
+                        "\\nabla",
+                        "\\partial",
+                        "d\\over d{}",
+                        "\\partial\\over\\partial{}",
+                        "\\lim_{{}\\to{}}",
+                        "dx","dy","dt"
+                    ]
+                },
+
+                {
+                    "dropDownTitle": "Operators",
+                    "dropDownCover": "\\sin",
+                    "items": [
+                        
+                        "\\log","\\ln","\\exp",
+                        "\\min","\\max",
+                        "\\sup","\\inf",
+                        "\\ker","\\dim",
+                        "\\gcd","\\det"
+                    ]
+                },
+
+                {
+                    "dropDownTitle": "Statistics",
+                    "dropDownCover": "\\sigma",
+                    "items": [
+                        "\\mu",
+                        "\\sigma",
+                        "\\bar{}",
+                        "\\Pr",
+                        "\\mathbb{E}",
+                        "Var",
+                        "Cov",
+                        "\\rho",
+                        "\\beta",
+                        "\\chi^2"
                     ]
                 }
             ]

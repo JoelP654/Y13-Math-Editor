@@ -10,7 +10,7 @@ import { OpenSaveScreen, SaveScreen } from "../components/saveScreens"
 import { FaFolder } from "react-icons/fa"
 import { addSave } from "../lib/saveFunctions"
 
-function Editor() {
+function Editor1() {
 
     const [id, setId] = useState(0)
     const [title, setTitle] = useState("")
@@ -20,6 +20,7 @@ function Editor() {
     const [tokens, setTokens] = useState([])
     const [openingSave, setOpeningSave] = useState(false)
     const [saving, setSaving] = useState(false)
+    const [inputOpen, setInputOpen] = useState(true)
     const mathRef = useRef(null)
 
     useEffect(() => {
@@ -96,42 +97,54 @@ function Editor() {
     return (
         <div className="editor">
 
-            <div className="topTab">
+            {/* <div className="topTab">
                 {title}
                 <FaFolder icon={"folder"} className="folderIcon" onClick={() => {setOpeningSave(true)}}/>
                 <div className="saveButton" onClick={() => {setSaving(true)}}>
                     Save
                 </div>
-            </div>
+            </div> */}
 
             <div className="workArea">
                 <Buttons write={(string) => {
-                    if (tokens.length == 0) {
-                        setInput(string)
-                    }
-                    else if (focusIndex == 0) {
-                        tokens[tokens.length - 1].write(string, true)
+                    if (tokens.length == 0 || focusIndex == 0) {
+                        setInput(input + " " + string)
                     }
                     else {
-                        tokens.forEach(token => {
+                        const writeToChildren = (token) => {
+                            token.children.forEach(child => { writeToChildren(child)})
                             if (token.tokenIndex == focusIndex) {
                                 token.write(string, true)
                                 if (focusIndex + 1 > tokens.length) {
                                     setFocusIndex(tokens.length)
                                 }
                             }
-                        })
+                        }
+                        tokens.forEach(token => writeToChildren(token))
                     }
                     
 
                 }}/>
-                <div ref={mathRef}>
+                <div
+                    ref={mathRef}
+                    className="katex-block"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key.length == 1) {
+                            setInput(input + " " + e.key)
+                        }
+                    }}
+                >
                     <BlockMath math={inputWithEmpty}/>
                 </div>
 
                 <div id="bBox-container"/>
 
-                <textarea
+                <div
+                    className={`inputArea ${!inputOpen && "closedInputArea"}`}
+                >
+                    <button onClick={() => setInputOpen(!inputOpen)}>Toggle</button>
+                    <textarea
                     className="textInput"
                     value={input}
                     onChange={(e) => {
@@ -139,6 +152,8 @@ function Editor() {
                     }}
                     onClick={() => {setFocusIndex(0)}}
                     />
+                </div>
+                
             </div>
 
             {(openingSave || saving) &&
@@ -163,4 +178,4 @@ function Editor() {
     )
 }
 
-export default Editor
+export default Editor1

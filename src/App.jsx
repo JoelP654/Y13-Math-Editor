@@ -2,13 +2,13 @@
 
 // Dev Imports
 import './themes/App.css'
-import Editor from './screens/editor'
+import Editor1 from './screens/editor1'
 
 // Main app
 function App() {
 
   return (
-    <Editor/>
+    <Editor1/>
   )
 }
 

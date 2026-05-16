@@ -9,6 +9,7 @@ import { BlockMath } from "react-katex"
 import "../themes/buttons.css"
 // Imports all information from json for buttons
 import buttonData from "../lib/buttonData.json"
+import logo from "../assets/logo.png"
 
 // Returns latex string with any {} filled in with 
 const addEmpty = (string) => {
@@ -103,15 +104,26 @@ export function Buttons({ write }) {
     return (
         <div className="buttonTab">
             <div className="tabSelector">
+                <img src={logo}/>
                 {/* Tab bar, for each tab render a button to switch to it */}
                 {tabs.map((object, index) => (
-                    <button
+                    <div
                         key={index}
-                        onClick={() => {setTabIndex(index)}}
-                        className={`tabButton ${tabIndex == index ? "selectedTab" : ""}`}
+                        className="tabCont"
                     >
-                        {object.tabTitle}
-                    </button>
+                        {index != 0 && (
+                            <div className="seperator">
+                                |
+                            </div>
+                        )}
+                        <button
+                            
+                            onClick={() => {setTabIndex(index)}}
+                            className={`tabButton ${tabIndex == index ? "selectedTabButton" : ""}`}
+                        >
+                            {object.tabTitle}
+                        </button>
+                    </div>
                 ))}
             </div>
             {/* Render the button bar of the currently selected tab */}

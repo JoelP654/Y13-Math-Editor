@@ -6,12 +6,12 @@ html, body, .root, .editor {
     height: 100%;
     overflow-y: hidden;
     overflow-x: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
 }
-
 
 .editor {
     height: 100%;
-    padding: 10px;
 }
 
 .workArea {
@@ -51,8 +51,8 @@ html, body, .root, .editor {
 }
 
 .textInput {
-    margin-bottom: 20px;
-    height: 100px;
+    height: 100%;
+    width: 100%
 }
 
 .saveModal {
@@ -89,4 +89,26 @@ html, body, .root, .editor {
     display: flex;
     flex-direction: row;
     background-color: red;
+}
+
+.katex-block {
+    border: 1px solid black;
+    height: 100%;
+    margin: 20px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(233, 233, 233);
+    pointer-events: auto;
+}
+
+.inputArea {
+    width: 100%;
+    margin-bottom: 100px;
+    height: 150px;
+    transition: margin-bottom 0.5s ease
+}
+
+.closedInputArea {
+    margin-bottom: -100px;
 }

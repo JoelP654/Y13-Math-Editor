@@ -125,7 +125,6 @@ export default class Token {
 
             // On backspace
             if (key == "Backspace") {
-
                 // If token length is over 1, remove last
                 if (this.stringValue.length > 1) {
                     this.stringValue = this.stringValue.slice(0, -1)
@@ -138,12 +137,12 @@ export default class Token {
                 }
                 // If token will be removed, set to empty, unless already empty, in which case remove it
                 else {
-                    if (this.type == "math" && this.stringValue.length > 0) {
+                    if (this.tokenType == "math" && this.stringValue.length > 0) {
                         this.stringValue = "\\phantom{o}"
                         this.tokenType = "empty"
                     }
                     // Somehow remove the token
-                    else if (this.type == "empty") {
+                    else if (this.tokenType == "empty") {
                         this.tokenType = "math"
                         this.stringValue = ""
                     }
