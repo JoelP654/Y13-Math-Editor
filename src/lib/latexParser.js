@@ -15,20 +15,20 @@ const seperateByFirstOccurence = (string, seperator) => {
     return [before, after]
 }
 
-// Returns array of strings, one for each detected line
-const parseLines = (input) => {
+// // Returns array of strings, one for each detected line
+// const parseLines = (input) => {
 
-    // If there is any input
-    if (input != "") {
+//     // If there is any input
+//     if (input != "") {
 
-        // Split by "\\", then join by \\newline so it can then split all \\newlines
-        var lines = input.split("\\\\").join("\\newline").split("\\newline")
-        return lines
-    }
+//         // Split by "\\", then join by \\newline so it can then split all \\newlines
+//         var lines = input.split("\\\\").join("\\newline").split("\\newline")
+//         return lines
+//     }
     
-    // If there was no input, return empty array
-    else { return [] }
-}
+//     // If there was no input, return empty array
+//     else { return [] }
+// }
 
 // Input should be single line
 // Returns object with two strings, comment and preComment
@@ -94,7 +94,8 @@ const parseChunk = (input) => {
         if (braceCount == 0) {
             if ("}]".includes(input[i])) {
                 if (braceBuffer.length == 0) {
-                    var token = new Token("\\phantom{o}", "empty")
+                    var token = new Token("\\phantom{o}", "empty", [])
+                    console.log("HERE1")
                     if (inSlash || inChar) { tokens[tokens.length - 1].children.push(token) }
                     else { tokens.push(token) }
                 }
@@ -156,7 +157,7 @@ export const parseLatex = (input) => {
     var tokens = [] // Array of tokens
 
     // Parse the input into lines
-    var lines = parseLines(input)
+    var lines = input.split("\n") //parseLines(input)
     
     // For every line
     lines.forEach(line => {

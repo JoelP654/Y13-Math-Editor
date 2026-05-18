@@ -4,11 +4,13 @@ import 'katex/dist/katex.min.css'
 import { parseLatex } from "../lib/latexParser"
 import { identifyTokens } from "../lib/tokenIdentifier"
 import "../themes/editor.css"
+import "../themes/katex.css"
 import { writeToken } from "../lib/latexWriter"
 import { Buttons } from "../components/expressionButtons"
 import { OpenSaveScreen, SaveScreen } from "../components/saveScreens"
 import { FaFolder } from "react-icons/fa"
 import { addSave } from "../lib/saveFunctions"
+import { downloadHtml, copyHtml } from "../lib/download"
 
 function Editor1() {
 
@@ -97,15 +99,7 @@ function Editor1() {
     return (
         <div className="editor">
 
-            {/* <div className="topTab">
-                {title}
-                <FaFolder icon={"folder"} className="folderIcon" onClick={() => {setOpeningSave(true)}}/>
-                <div className="saveButton" onClick={() => {setSaving(true)}}>
-                    Save
-                </div>
-            </div> */}
-
-            <div className="workArea">
+            <div className="topTab">
                 <Buttons write={(string) => {
                     if (tokens.length == 0 || focusIndex == 0) {
                         setInput(input + " " + string)
@@ -125,32 +119,62 @@ function Editor1() {
                     
 
                 }}/>
+                {title}
+                <FaFolder icon={"folder"} className="folderIcon" onClick={() => {setOpeningSave(true)}}/>
+                <div className="saveButton" onClick={() => {setSaving(true)}}>
+                    Save
+                </div>
+            </div>
+
+            <div className="workArea">
+                
                 <div
-                    ref={mathRef}
                     className="katex-block"
                     tabIndex={0}
                     onKeyDown={(e) => {
                         if (e.key.length == 1) {
                             setInput(input + " " + e.key)
+                            setFocusIndex(0)
                         }
                     }}
                 >
-                    <BlockMath math={inputWithEmpty}/>
+                    <div className="katex-spacer"/>
+                    <div
+                        ref={mathRef}
+                        className="katex-math"
+                    >
+                        <BlockMath math={`\\begin{aligned}${inputWithEmpty}\\end{aligned}`}/>
+                    </div>
+                    <div className="katex-buttons">
+                        <button className="copyButton" onClick={() => copyHtml(mathRef.current)}>
+                            Copy
+                        </button>
+                        <button className="downloadButton" onClick={() => downloadHtml(mathRef.current, "formulate-output.png", true)}>
+                            Download White
+                        </button>
+                        <button className="downloadButton" onClick={() => downloadHtml(mathRef.current, "formulate-output.png", false)}>
+                            Download Transparent
+                        </button>
+                    </div>
+                    
                 </div>
+                
 
                 <div id="bBox-container"/>
-
+                
                 <div
                     className={`inputArea ${!inputOpen && "closedInputArea"}`}
                 >
-                    <button onClick={() => setInputOpen(!inputOpen)}>Toggle</button>
+                    <div className="toggleButtonContainer">
+                        <button className="toggleButton" onClick={() => setInputOpen(!inputOpen)}>&lt;/&gt;</button>
+                    </div>
                     <textarea
-                    className="textInput"
-                    value={input}
-                    onChange={(e) => {
-                        setInput(e.target.value)
-                    }}
-                    onClick={() => {setFocusIndex(0)}}
+                        className="textInput"
+                        value={input}
+                        onChange={(e) => {
+                            setInput(e.target.value)
+                        }}
+                        onClick={() => {setFocusIndex(0)}}
                     />
                 </div>
                 

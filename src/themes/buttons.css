@@ -38,6 +38,7 @@
 .buttonBar {
     display: flex;
     width: 100%;
+    background-color: white;
 }
 .expressionButton {
     border: 2px dotted lightgrey;

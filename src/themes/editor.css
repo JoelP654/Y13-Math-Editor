@@ -1,7 +1,3 @@
-.katex {
-    pointer-events: none;
-}
-
 html, body, .root, .editor {
     height: 100%;
     overflow-y: hidden;
@@ -11,48 +7,24 @@ html, body, .root, .editor {
 }
 
 .editor {
-    height: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .workArea {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-}
-
-.math-box {
-    padding: 1px;
-    margin-left: -3px;
-    margin-top: -3px;
-    cursor: text;
-    pointer-events: auto;
-}
-
-.hovered-box {
-    border: 2px dotted black;
-}
-
-.empty-box {
-    border: 1px dotted black;
-    width: 7px !important;
-    height: 7px !important;
-    margin-left: 0px !important;
-    margin-top: 3px !important;
-}
-
-.focused-box {
-    outline: none;
-    box-shadow: none;
-    border: 2px solid black;
-    color: transparent;
-    caret-color: black;
-    font-size: 19px;
+    overflow: hidden;
+    flex: 1;
 }
 
 .textInput {
     height: 100%;
-    width: 100%
+    width: 100%;
+    flex: 1;
+    border: 2px solid black;
+    font-size: 20px;
 }
 
 .saveModal {
@@ -68,7 +40,7 @@ html, body, .root, .editor {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: end;
+    background-color: #880088;
 }
 
 .saveButton {
@@ -93,22 +65,40 @@ html, body, .root, .editor {
 
 .katex-block {
     border: 1px solid black;
-    height: 100%;
     margin: 20px;
-    align-items: center;
     display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+
     background-color: rgb(233, 233, 233);
     pointer-events: auto;
+    overflow: auto;
 }
 
 .inputArea {
     width: 100%;
-    margin-bottom: 100px;
-    height: 150px;
-    transition: margin-bottom 0.5s ease
+    height: 200px;
+    transition: height 0.3s ease;
+    flex-shrink: 0;
 }
 
 .closedInputArea {
-    margin-bottom: -100px;
+    height: 50px;
+}
+
+.toggleButtonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.toggleButton {
+    margin-right: 60px;
+    height: 50px;
+    width: 80px;
+    border-top-left-radius: 80px;
+    border-top-right-radius: 80px;
+    border: 1px solid black;
+    font-size: 20px;
 }

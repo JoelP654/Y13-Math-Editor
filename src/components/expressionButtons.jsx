@@ -19,27 +19,47 @@ const addEmpty = (string) => {
 // Button to add an expression
 export function ExpressionButton({ string, write }) {
     const mathRef = useRef(null)
+    const [custom_display, setCustomDisplay] = useState("")
 
     // Once every render, update empty boxes to have correct class
     useEffect(() => {
+
+        // Linter workaround (so it stops yelling at me)
+        const setCustom = (text) => {
+            setCustomDisplay(text)
+        }
+        if (string == "\\text{}") { setCustom("Text") }
+
         let html = mathRef.current
-        let spans = Array.from(html.querySelectorAll("span"))
-        spans.forEach(span => {
-            if (span.childElementCount == 0 && span.classList.contains("mord") && span.textContent == "o") {
-                span.classList.add("empty-box")
-            }
-        })
-    })
+        // If no custom display, render the math about the button will input
+        if (custom_display == "") {
+            let spans = Array.from(html.querySelectorAll("span"))
+            spans.forEach(span => {
+                if (span.childElementCount == 0 && span.classList.contains("mord") && span.textContent == "o") {
+                    span.classList.add("empty-box")
+                }
+            })
+        }
+        
+    }, [string, custom_display])
 
     return (
         <button 
             className="expressionButton"
             // On press, write string to token
             onClick={() => { write(string) }}>
-            <div ref={mathRef}>
-                {/* Katex display */}
-                <BlockMath math={addEmpty(string)}/>
-            </div>
+            
+            {/* If no custom display, render math */}
+            {custom_display == "" ? (
+                <div ref={mathRef}>
+                    {/* Katex display */}
+                    <BlockMath math={addEmpty(string)}/>
+                </div>
+            ) : (
+                // Otherwise, render custom display
+                <div>{custom_display}</div>
+            )}
+            
             
         </button>
     )

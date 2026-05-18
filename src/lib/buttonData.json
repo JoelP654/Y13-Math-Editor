@@ -180,6 +180,12 @@
                     ]
                 }
             ]
+        },
+        {
+            "tabTitle": "Text",
+            "barElements": [
+                "\\text{}"
+            ]
         }
     ]
 }
