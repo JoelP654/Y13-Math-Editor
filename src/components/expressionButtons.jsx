@@ -17,7 +17,7 @@ const addEmpty = (string) => {
 }
 
 // Button to add an expression
-export function ExpressionButton({ string, write }) {
+export function ExpressionButton({ string, write, inDropDown }) {
     const mathRef = useRef(null)
     const [custom_display, setCustomDisplay] = useState("")
 
@@ -29,6 +29,7 @@ export function ExpressionButton({ string, write }) {
             setCustomDisplay(text)
         }
         if (string == "\\text{}") { setCustom("Text") }
+        if (string == "\\newline") { setCustom("New Line") }
 
         let html = mathRef.current
         // If no custom display, render the math about the button will input
@@ -41,17 +42,18 @@ export function ExpressionButton({ string, write }) {
             })
         }
         
-    }, [string, custom_display])
+    })
 
     return (
         <button 
-            className="expressionButton"
+            className= {`expressionButton ${inDropDown && "inDropDownButton"}`}
             // On press, write string to token
-            onClick={() => { write(string) }}>
+            onClick={() => { write(string) }}
+        >
             
             {/* If no custom display, render math */}
             {custom_display == "" ? (
-                <div ref={mathRef}>
+                <div className="buttonKatex" ref={mathRef}>
                     {/* Katex display */}
                     <BlockMath math={addEmpty(string)}/>
                 </div>
@@ -78,11 +80,15 @@ export function ButtonDropDown({ dropDownObject, write }) {
         >
             <div className="coverButton">
                 <div className="expressionButton">
+
                     {/* Katex display */}
-                    <BlockMath
-                        math={latex}
-                        write={write}
-                    />
+                    <div className="buttonKatex">
+                        <BlockMath
+                            math={latex}
+                            write={write}
+                        />
+                    </div>
+
                     {/* Drop down title */}
                     {dropDownObject.dropDownTitle}
                     {/* Down arrow (indicates drop down) */}
@@ -94,7 +100,7 @@ export function ButtonDropDown({ dropDownObject, write }) {
             <div className="dropDown">
                 {/* For each object, render expression button */}
                 {hovered && dropDownObject.items.map((object, index) => (
-                    <ExpressionButton key={index} string={object} write={write}/>
+                    <ExpressionButton key={index} string={object} write={write} inDropDown={true}/>
                 ))}
             </div>
             

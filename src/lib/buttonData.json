@@ -184,7 +184,7 @@
         {
             "tabTitle": "Text",
             "barElements": [
-                "\\text{}"
+                "\\text{}", "\\newline"
             ]
         }
     ]

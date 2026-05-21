@@ -5,7 +5,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 // Dev Imports
-import './themes/index.css'
 import App from './App.jsx'
 import 'katex/dist/katex.min.css' // Imported from KaTeX - Ensures all math in app is styled correctly
 

@@ -11,8 +11,10 @@ import { OpenSaveScreen, SaveScreen } from "../components/saveScreens"
 import { FaFolder } from "react-icons/fa"
 import { addSave } from "../lib/saveFunctions"
 import { downloadHtml, copyHtml } from "../lib/download"
+import { TbLayoutColumns, TbLayoutRows } from "react-icons/tb"
+import { FaCode } from "react-icons/fa6"
 
-function Editor1() {
+function Editor() {
 
     const [id, setId] = useState(0)
     const [title, setTitle] = useState("")
@@ -23,6 +25,7 @@ function Editor1() {
     const [openingSave, setOpeningSave] = useState(false)
     const [saving, setSaving] = useState(false)
     const [inputOpen, setInputOpen] = useState(true)
+    const [hori, setHori] = useState(false)
     const mathRef = useRef(null)
 
     useEffect(() => {
@@ -126,7 +129,7 @@ function Editor1() {
                 </div>
             </div>
 
-            <div className="workArea">
+            <div className={`workArea ${hori && "hori"}`}>
                 
                 <div
                     className="katex-block"
@@ -163,19 +166,28 @@ function Editor1() {
                 <div id="bBox-container"/>
                 
                 <div
-                    className={`inputArea ${!inputOpen && "closedInputArea"}`}
+                    className={`inputArea ${!inputOpen && "closedInputArea"} ${hori && "hori"}`}
                 >
-                    <div className="toggleButtonContainer">
-                        <button className="toggleButton" onClick={() => setInputOpen(!inputOpen)}>&lt;/&gt;</button>
+                    <div className={`toggleButtonContainer ${hori && "hori"}`}>
+                        <div
+                            className={`toggleButton ${hori && "hori"}`}
+                            onClick={() => setInputOpen(!inputOpen)}
+                        >
+                            <FaCode size={20}/>
+                        </div>
                     </div>
                     <textarea
-                        className="textInput"
+                        className={`textInput ${hori && "hori"}`}
+                        id="textInput"
                         value={input}
                         onChange={(e) => {
                             setInput(e.target.value)
                         }}
                         onClick={() => {setFocusIndex(0)}}
                     />
+                    <div className={`horiSwitch ${hori && "hori"} ${!inputOpen && "closed"}`} onClick={() => {setHori(!hori)}}>
+                        {hori ? <TbLayoutRows size={20}/> : <TbLayoutColumns size={20}/>}
+                    </div>
                 </div>
                 
             </div>
@@ -202,4 +214,4 @@ function Editor1() {
     )
 }
 
-export default Editor1
+export default Editor
