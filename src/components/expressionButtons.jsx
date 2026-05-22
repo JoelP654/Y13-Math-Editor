@@ -10,6 +10,7 @@ import "../themes/buttons.css"
 // Imports all information from json for buttons
 import buttonData from "../lib/buttonData.json"
 import logo from "../assets/logo.png"
+import { FaFolder } from "react-icons/fa"
 
 // Returns latex string with any {} filled in with 
 const addEmpty = (string) => {
@@ -123,10 +124,12 @@ export function ButtonBar({ barObjects, write }) {
 }
 
 // Renders all buttons and tab bar
-export function Buttons({ write }) {
+export function Buttons({ write, open, save, title, setTitle}) {
     const [tabIndex, setTabIndex] = useState(0)
+
     // Get information from .json file
     const tabs = buttonData.tabs
+
     return (
         <div className="buttonTab">
             <div className="tabSelector">
@@ -151,6 +154,21 @@ export function Buttons({ write }) {
                         </button>
                     </div>
                 ))}
+                    <div className="saveButtons">
+                        <input
+                            className="saveTitleInput"
+                            placeholder="Save name..."
+                            value={title}
+                            onChange={(e) => {
+                                setTitle(e.target.value)
+                            }}
+                        />
+                        <FaFolder icon={"folder"} color="white" onClick={open} size={25}/>
+                        <button className="saveButton" onClick={save}>
+                            Save
+                        </button>
+                    </div>
+                    
             </div>
             {/* Render the button bar of the currently selected tab */}
             <ButtonBar barObjects={tabs[tabIndex].barElements} write={write}/>

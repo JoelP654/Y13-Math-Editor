@@ -1,0 +1,111 @@
+.saveModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(233, 233, 233);
+    border: 3px solid white;
+    border-radius: 20px;
+    border-bottom-right-radius: 0px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}  
+.filesModal {
+    height: 500px;
+}
+.saveComponent {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.saveModalTopBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #880088;
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    font: 15px sans-serif;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.savesContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    font: 15px sans-serif;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+.openButton {
+    background-color: #880088;
+    color: white;
+    border: 0;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.loadSaveButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.saveTitleContainer {
+    font-weight: bold;
+    max-width: 100px;
+    overflow: hidden;
+}
+.saveContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+.saveSaveButton {
+    background-color: #880088;
+    color: white;
+    margin-top: auto;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    align-content: center;
+    font: 20px sans-serif;
+    font-weight: bold;
+}
+.saveMessage {
+    font: 15px sans-serif;
+}
+
+.saveSaveTitleInput {
+    margin: 10px;
+    width: 195px;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 25px;
+    padding: 5px;
+}
+
+.filesTitle {
+    display: flex;
+    flex-direction: column;
+}
+.filesWarning {
+    font-size: 15px;
+    color: #eee;
+    margin-top: -20px;
+    margin-bottom: 10px;
+}

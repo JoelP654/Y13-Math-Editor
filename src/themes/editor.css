@@ -27,15 +27,6 @@ html, body, .root, .editor {
     font-size: 20px;
 }
 
-.saveModal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: grey;
-    border: 1px solid black;
-}
-
 .topTab {
     display: flex;
     flex-direction: row;
@@ -55,12 +46,6 @@ html, body, .root, .editor {
     height: 100%;
     top: 0;
     left: 0;
-}
-
-.saveComponent {
-    display: flex;
-    flex-direction: row;
-    background-color: red;
 }
 
 .katex-block {

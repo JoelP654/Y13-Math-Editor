@@ -8,6 +8,7 @@ import { FaTrash } from "react-icons/fa"
 import { useEffect, useState } from "react"
 import { getItem, removeSave } from "../lib/saveFunctions"
 import { MdCancel } from "react-icons/md"
+import "../themes/saveScreens.css"
 
 // The screen that appears to open saves.
 export function OpenSaveScreen({ close, openSave }) {
@@ -25,38 +26,48 @@ export function OpenSaveScreen({ close, openSave }) {
     }, [update])
 
     return (
-        <div className="saveModal">
+        <div className="saveModal filesModal">
 
             {/* Top bar */}
-            <div>
-                <h1>Load Save</h1>
-                <MdCancel icon={"cancel"} onClick={close}/>
+            <div className="saveModalTopBar">
+                <div className="filesTitle">
+                    <h1>Files</h1>
+                    <div className="filesWarning">Any current unsaved projects will be lost</div>
+                </div>
+                
+                <MdCancel icon={"cancel"} onClick={close} size={30}/>
             </div>
 
-            {/* For each save, render the save */}
-            {saves && saves.map((save) => (
-                <div className="saveComponent" key={save.id}>
+            <div className="savesContainer">
+                {/* For each save, render the save */}
+                {saves && saves.map((save) => (
+                    <div className="saveComponent" key={save.id}>
 
-                    {/* Save information */}
-                    {save.title}
-                    {"Last modified: " + (new Date(save.date)).toLocaleDateString()}
-                    
-                    {/* Delete save button */}
-                    <FaTrash icon={"trash-can"} onClick={() => { removeSave(save.id); setUpdate(update + 1) }}/>
-                    
-                    {/* Open save button */}
-                    <div
-                        onClick={() => { openSave(save.id, save.title, save.latex); close() }}
-                    >
-                        Open
+                        {/* Save information */}
+                        <div className="saveTitleContainer">{save.title}</div>
+                        
+                        <div>{"Last modified: " + (new Date(save.date)).toLocaleDateString()}</div>
+                        
+                        <div className="loadSaveButtons">
+                            {/* Open save button */}
+                            <div
+                                onClick={() => { openSave(save.id, save.title, save.latex); close() }}
+                                className="openButton"
+                            >
+                                Open
+                            </div>
+                            {/* Delete save button */}
+                            <FaTrash icon={"trash-can"} onClick={() => { removeSave(save.id); setUpdate(update + 1) }}/>
+                        </div>
+                        
                     </div>
-                </div>
-            ))}
+                ))}
 
-            {/* If no saves, display message */}
-            {saves.length == 0 &&
-                <div>No saves found</div>
-            }
+                {/* If no saves, display message */}
+                {saves.length == 0 &&
+                    <div>No Files Found</div>
+                }
+            </div>
         </div>
     )
 }
@@ -77,39 +88,48 @@ export function SaveScreen({ close, save, title }) {
         <div className="saveModal">
 
             {/* Top bar */}
-            <div>
-                <h1>Save</h1>
-                <MdCancel icon={"cancel"} onClick={close}/>
+            <div className="saveModalTopBar">
+                <h1>Save</h1>         
+                <MdCancel icon={"cancel"} onClick={close} size={30}/>
             </div>
 
-            {/* Input bar */}
-            <input
-                value={inputTitle}
-                onChange={(e) => {
-                    setInputTitle(e.target.value)
-                    setMessage("")
+
+            <div className="saveContent">
+
+                 {/* Input bar */}
+                <input
+                    className="saveSaveTitleInput"
+                    value={inputTitle}
+                    onChange={(e) => {
+                        setInputTitle(e.target.value)
+                        setMessage("")
+                    }}
+                />
+
+                {/* Save button */}
+                <div onClick={() => {
+                    // If valid title, save and close
+                    if (inputTitle != "") {
+                        save(inputTitle)
+                        close()
+                    }
+                    // Otherwise, set warning message
+                    else {
+                        setMessage("Enter a Valid Save Name")
+                    }
                 }}
-            />
+                className="saveSaveButton"
+                >
+                    Save
+                </div>
 
-            {/* Save button */}
-            <div onClick={() => {
-                // If valid title, save and close
-                if (inputTitle != "") {
-                    save(inputTitle)
-                    close()
-                }
-                // Otherwise, set warning message
-                else {
-                    setMessage("Enter a Valid Save Name")
-                }
-            }}>
-                Save
-            </div>
+                {/* Display message */}
+                <div className="saveMessage">
+                    {message}
+                </div>
 
-            {/* Display message */}
-            <div>
-                {message}
             </div>
+           
         </div>
     )
 }

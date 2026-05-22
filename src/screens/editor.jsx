@@ -8,7 +8,6 @@ import "../themes/katex.css"
 import { writeToken } from "../lib/latexWriter"
 import { Buttons } from "../components/expressionButtons"
 import { OpenSaveScreen, SaveScreen } from "../components/saveScreens"
-import { FaFolder } from "react-icons/fa"
 import { addSave } from "../lib/saveFunctions"
 import { downloadHtml, copyHtml } from "../lib/download"
 import { TbLayoutColumns, TbLayoutRows } from "react-icons/tb"
@@ -119,14 +118,13 @@ function Editor() {
                         }
                         tokens.forEach(token => writeToChildren(token))
                     }
-                    
+                }}
+                title={title}
+                open={() => {setOpeningSave(true)}}
+                save={() => {setSaving(true)}}
+                setTitle={(newTitle) => {setTitle(newTitle)}}
+                />
 
-                }}/>
-                {title}
-                <FaFolder icon={"folder"} className="folderIcon" onClick={() => {setOpeningSave(true)}}/>
-                <div className="saveButton" onClick={() => {setSaving(true)}}>
-                    Save
-                </div>
             </div>
 
             <div className={`workArea ${hori && "hori"}`}>
@@ -205,7 +203,11 @@ function Editor() {
                             <SaveScreen
                                 title={title}
                                 close={() => setSaving(false)}
-                                save={(saveTitle) => addSave(id || crypto.randomUUID(), saveTitle, input)}
+                                save={(saveTitle) => {
+                                    addSave(id || crypto.randomUUID(), saveTitle, input)
+                                    setTitle(saveTitle)
+                                    setSaving(false)
+                                }}
                             />
                     }
                 </div>
