@@ -1,6 +1,5 @@
 // The App.jsx file is used for controlling navigation and screen logic
-
-// Dev Imports
+// I only made an editor screen, but if I made more I would put navigation here
 
 import Editor from './screens/editor'
 

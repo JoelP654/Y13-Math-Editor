@@ -1,3 +1,11 @@
+/*
+    Joel Patterson
+    23/5/26
+    Main editor styling
+    Most of this is self explanatory
+*/
+
+/* Ensure document fills screen */
 html, body, .root, .editor {
     height: 100%;
     overflow-y: hidden;
@@ -11,14 +19,12 @@ html, body, .root, .editor {
     display: flex;
     flex-direction: column;
 }
-
 .workArea {
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex: 1;
 }
-
 .textInput {
     height: 100%;
     width: 100%;
@@ -26,19 +32,16 @@ html, body, .root, .editor {
     border: 2px solid black;
     font-size: 20px;
 }
-
 .topTab {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     background-color: #880088;
 }
-
 .saveButton {
     background-color: blue;
     color: white;
 }
-
 .modalBackdrop {
     position: absolute;
     background-color: rgba(1, 1, 1, 0.2);
@@ -47,7 +50,6 @@ html, body, .root, .editor {
     top: 0;
     left: 0;
 }
-
 .katex-block {
     border: 1px solid black;
     margin: 20px;
@@ -62,6 +64,7 @@ html, body, .root, .editor {
     overflow: auto;
 }
 
+/* Input area and toggle */
 .inputArea {
     width: 100%;
     height: 200px;
@@ -69,11 +72,9 @@ html, body, .root, .editor {
     flex-shrink: 0;
     position: relative;
 }
-
 .closedInputArea {
     height: 50px;
 }
-
 .toggleButtonContainer {
     width: 100%;
     display: flex;
@@ -108,7 +109,6 @@ html, body, .root, .editor {
 .horiSwitch.closed {
     display: none;
 }
-
 .workArea.hori {
     flex-direction: row;
 }

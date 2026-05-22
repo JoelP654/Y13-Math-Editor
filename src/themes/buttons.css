@@ -1,3 +1,11 @@
+/*
+    Joel Patterson
+    23/5/26
+    CSS Button styling
+    Most of this is self explanatory
+*/
+
+/* Tab buttons */
 .buttonTab {
     display: block;
     width: 100%;
@@ -40,6 +48,8 @@
     width: 100%;
     background-color: white;
 }
+
+/* Main expression button */
 .expressionButton {
     border: 2px dotted lightgrey;
     padding-left: 5px;
@@ -54,6 +64,8 @@
     min-width: 40px;
     height: 90px;
 }
+
+/* Dropdown */
 .dropDown {
     position: absolute;
     padding: 0px;
@@ -65,17 +77,14 @@
 .downArrow {
     width: 10px;
 }
-
 .dropDownButton {
     padding: 5px;
     height: 40px;
 }
-
 .inDropDownButton {
     height: 50px;
     padding: 10px;
 }
-
 .coverButton {
     height: 90px;
 }
@@ -83,7 +92,7 @@
     max-height: 60px;
 }
 
-
+/* Save buttons */
 .saveButtons {
     margin-left: auto;
     margin-right: 20px;

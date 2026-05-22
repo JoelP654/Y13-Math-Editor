@@ -1,3 +1,10 @@
+/*
+    Joel Patterson
+    23/5/26
+    Katex styling
+    Most of this is self explanatory
+*/
+
 .katex {
     pointer-events: none;
 }

@@ -4,6 +4,7 @@
 // This file contains functions to handle and manage saving
 
 // Basic class to use as container for save values
+// I though I would need a class for some methods, but I didn't
 export class Save {
     constructor(id, title, latex, date) {
         this.id = id

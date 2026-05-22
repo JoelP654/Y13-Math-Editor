@@ -3,16 +3,16 @@
 // Latex Writer
 // Allows tokens to be written back to latex code, constructing the input loop
 
+// Takes a token and attempts to accurately return its LaTeX code
+// Will only write empty boxes if specified
 export const writeToken = (token, includeEmpty) => {
 
     if (token.tokenType == "math" || includeEmpty) {
-        // Start with the string value of the token
+
         var writeString = token.stringValue
 
-        // If the token has children
+        // For every child, write the child enlocsed by braces, and add it
         if (token.children.length > 0) {
-
-            // Render all of the children's values, enclosed by {}
             writeString += "{"
             token.children.forEach(child => {
                 writeString += writeToken(child, includeEmpty)
@@ -20,7 +20,6 @@ export const writeToken = (token, includeEmpty) => {
             writeString += "}"
         }
         
-        // Return the string, with a space at the end so it doesn't conflict with the next token (safeguard)
         return writeString + " "
     }
     else { return "" }

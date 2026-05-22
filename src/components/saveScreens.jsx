@@ -1,7 +1,7 @@
 // Joel Patterson
 // 7/5/26
 // Save screens
-// This contains react components to 
+// This contains the popup react components for saving and opening saves
 
 // Imports
 import { FaTrash } from "react-icons/fa"
@@ -12,11 +12,10 @@ import "../themes/saveScreens.css"
 
 // The screen that appears to open saves.
 export function OpenSaveScreen({ close, openSave }) {
-    // State variables
     const [saves, setSaves] = useState([])
-    const [update, setUpdate] = useState(0) // This is used as a cheat to refresh saves
+    const [update, setUpdate] = useState(0) // This is used as a 'cheat' to refresh saves
 
-    // On mount or when updating, get the saves
+    // On render or when updating, get the saves
     useEffect(() => {
         const getSaves = () => {
             const get = getItem("saves", [])
@@ -30,15 +29,20 @@ export function OpenSaveScreen({ close, openSave }) {
 
             {/* Top bar */}
             <div className="saveModalTopBar">
+
+                {/* Title */}
                 <div className="filesTitle">
                     <h1>Files</h1>
                     <div className="filesWarning">Any current unsaved projects will be lost</div>
                 </div>
                 
+                {/* Cancel icon */}
                 <MdCancel icon={"cancel"} onClick={close} size={30}/>
             </div>
 
+            {/* Save container */}
             <div className="savesContainer">
+
                 {/* For each save, render the save */}
                 {saves && saves.map((save) => (
                     <div className="saveComponent" key={save.id}>
@@ -46,6 +50,7 @@ export function OpenSaveScreen({ close, openSave }) {
                         {/* Save information */}
                         <div className="saveTitleContainer">{save.title}</div>
                         
+                        {/* Last modified date */}
                         <div>{"Last modified: " + (new Date(save.date)).toLocaleDateString()}</div>
                         
                         <div className="loadSaveButtons">
@@ -56,10 +61,11 @@ export function OpenSaveScreen({ close, openSave }) {
                             >
                                 Open
                             </div>
+
                             {/* Delete save button */}
                             <FaTrash icon={"trash-can"} onClick={() => { removeSave(save.id); setUpdate(update + 1) }}/>
-                        </div>
                         
+                        </div>
                     </div>
                 ))}
 
@@ -67,6 +73,7 @@ export function OpenSaveScreen({ close, openSave }) {
                 {saves.length == 0 &&
                     <div>No Files Found</div>
                 }
+
             </div>
         </div>
     )
@@ -75,7 +82,6 @@ export function OpenSaveScreen({ close, openSave }) {
 // Component to create a new save
 export function SaveScreen({ close, save, title }) {
 
-    // State variables
     const [inputTitle, setInputTitle] = useState(title)
     const [message, setMessage] = useState("")
 
@@ -96,7 +102,7 @@ export function SaveScreen({ close, save, title }) {
 
             <div className="saveContent">
 
-                 {/* Input bar */}
+                 {/* Title input bar */}
                 <input
                     className="saveSaveTitleInput"
                     value={inputTitle}
@@ -107,18 +113,18 @@ export function SaveScreen({ close, save, title }) {
                 />
 
                 {/* Save button */}
-                <div onClick={() => {
-                    // If valid title, save and close
-                    if (inputTitle != "") {
-                        save(inputTitle)
-                        close()
-                    }
-                    // Otherwise, set warning message
-                    else {
-                        setMessage("Enter a Valid Save Name")
-                    }
-                }}
-                className="saveSaveButton"
+                <div
+                    className="saveSaveButton"
+                    onClick={() => {
+                        // If valid title, save and close. Otherwise, set warning message
+                        if (inputTitle != "") {
+                            save(inputTitle)
+                            close()
+                        }
+                        else {
+                            setMessage("Enter a Valid Save Name")
+                        }
+                    }}
                 >
                     Save
                 </div>
@@ -129,7 +135,6 @@ export function SaveScreen({ close, save, title }) {
                 </div>
 
             </div>
-           
         </div>
     )
 }

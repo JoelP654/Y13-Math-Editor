@@ -1,3 +1,10 @@
+/*
+    Joel Patterson
+    23/5/26
+    Save screen styling
+    Most of this is self explanatory
+*/
+
 .saveModal {
     position: absolute;
     top: 50%;
@@ -89,7 +96,6 @@
 .saveMessage {
     font: 15px sans-serif;
 }
-
 .saveSaveTitleInput {
     margin: 10px;
     width: 195px;
@@ -98,7 +104,6 @@
     height: 25px;
     padding: 5px;
 }
-
 .filesTitle {
     display: flex;
     flex-direction: column;

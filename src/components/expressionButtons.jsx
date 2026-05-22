@@ -7,12 +7,12 @@
 import { useRef, useState, useEffect } from "react"
 import { BlockMath } from "react-katex"
 import "../themes/buttons.css"
-// Imports all information from json for buttons
-import buttonData from "../lib/buttonData.json"
 import logo from "../assets/logo.png"
 import { FaFolder } from "react-icons/fa"
+// Imports all information from json for buttons
+import buttonData from "../lib/buttonData.json"
 
-// Returns latex string with any {} filled in with 
+// Returns latex string with any {} filled in with an empty box
 const addEmpty = (string) => {
     return string.split("{").join("{\\phantom{o}")
 }
@@ -22,17 +22,19 @@ export function ExpressionButton({ string, write, inDropDown }) {
     const mathRef = useRef(null)
     const [custom_display, setCustomDisplay] = useState("")
 
-    // Once every render, update empty boxes to have correct class
+    // Once every render, update empty boxes to have correct class to display empty box
     useEffect(() => {
 
         // Linter workaround (so it stops yelling at me)
         const setCustom = (text) => {
             setCustomDisplay(text)
         }
+
         if (string == "\\text{}") { setCustom("Text") }
         if (string == "\\newline") { setCustom("New Line") }
 
         let html = mathRef.current
+
         // If no custom display, render the math about the button will input
         if (custom_display == "") {
             let spans = Array.from(html.querySelectorAll("span"))
@@ -46,6 +48,7 @@ export function ExpressionButton({ string, write, inDropDown }) {
     })
 
     return (
+        // Main button
         <button 
             className= {`expressionButton ${inDropDown && "inDropDownButton"}`}
             // On press, write string to token
@@ -140,21 +143,27 @@ export function Buttons({ write, open, save, title, setTitle}) {
                         key={index}
                         className="tabCont"
                     >
+
+                        {/* Render a seperator before button if its not the first one */}
                         {index != 0 && (
                             <div className="seperator">
                                 |
                             </div>
                         )}
+
                         <button
-                            
                             onClick={() => {setTabIndex(index)}}
                             className={`tabButton ${tabIndex == index ? "selectedTabButton" : ""}`}
                         >
                             {object.tabTitle}
                         </button>
+
                     </div>
                 ))}
+                    {/* Other buttons on top tab - moved from editor.jsx to here */}
                     <div className="saveButtons">
+
+                        {/* Save title name */}
                         <input
                             className="saveTitleInput"
                             placeholder="Save name..."
@@ -163,13 +172,17 @@ export function Buttons({ write, open, save, title, setTitle}) {
                                 setTitle(e.target.value)
                             }}
                         />
+
+                        {/* File icon */}
                         <FaFolder icon={"folder"} color="white" onClick={open} size={25}/>
+
+                        {/* Save button */}
                         <button className="saveButton" onClick={save}>
                             Save
                         </button>
                     </div>
-                    
             </div>
+            
             {/* Render the button bar of the currently selected tab */}
             <ButtonBar barObjects={tabs[tabIndex].barElements} write={write}/>
         </div>
