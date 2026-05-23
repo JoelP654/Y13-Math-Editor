@@ -31,7 +31,7 @@ export function ExpressionButton({ string, write, inDropDown }) {
         }
 
         if (string == "\\text{}") { setCustom("Text") }
-        if (string == "\\newline") { setCustom("New Line") }
+        if (string == "\\newline {}") { setCustom("New Line") }
 
         let html = mathRef.current
 

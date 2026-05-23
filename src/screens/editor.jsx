@@ -41,6 +41,7 @@ function Editor() {
     // On render or input change, parse all tokens
     // Update display input as well by writing tokens with empty boxes
     useEffect(() => {
+
         const parsedTokens = parseLatex(input)
         setTokens(parsedTokens)
 
@@ -50,7 +51,7 @@ function Editor() {
         })
         setInputWithEmpty(newInputWithEmpty)
 
-    }, [input])
+    }, [input, inputOpen, hori])
 
 
     // On render, token change or input change, index and identify all tokens
