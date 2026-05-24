@@ -149,6 +149,11 @@ function Editor() {
                     open={() => {setOpeningSave(true)}}
                     save={() => {setSaving(true)}}
                     setTitle={(newTitle) => {setTitle(newTitle)}}
+                    newSave={() => {
+                        setId(null)
+                        setTitle("")
+                        setInput("")
+                    }}
                 />
             </div>
 
@@ -245,7 +250,9 @@ function Editor() {
                                 title={title}
                                 close={() => setSaving(false)}
                                 save={(saveTitle) => {
-                                    addSave(id || crypto.randomUUID(), saveTitle, input)
+                                    const newId = crypto.randomUUID()
+                                    addSave(id || newId, saveTitle, input)
+                                    setId(id || newId)
                                     setTitle(saveTitle)
                                     setSaving(false)
                                 }}

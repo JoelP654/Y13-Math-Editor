@@ -8,7 +8,7 @@ import { useRef, useState, useEffect } from "react"
 import { BlockMath } from "react-katex"
 import "../themes/buttons.css"
 import logo from "../assets/logo.png"
-import { FaFolder } from "react-icons/fa"
+import { FaFolder, FaPlus } from "react-icons/fa"
 // Imports all information from json for buttons
 import buttonData from "../lib/buttonData.json"
 
@@ -127,7 +127,7 @@ export function ButtonBar({ barObjects, write }) {
 }
 
 // Renders all buttons and tab bar
-export function Buttons({ write, open, save, title, setTitle}) {
+export function Buttons({ write, open, save, title, setTitle, newSave}) {
     const [tabIndex, setTabIndex] = useState(0)
 
     // Get information from .json file
@@ -162,6 +162,14 @@ export function Buttons({ write, open, save, title, setTitle}) {
                 ))}
                     {/* Other buttons on top tab - moved from editor.jsx to here */}
                     <div className="saveButtons">
+
+                        {/* New Save button */}
+                        <FaPlus className="newSave" size={20} onClick={() => {
+                                if (confirm("Any unsaved changes will be lost. Are you sure?")) {
+                                    newSave()
+                                }
+                            }}
+                        />
 
                         {/* Save title name */}
                         <input
