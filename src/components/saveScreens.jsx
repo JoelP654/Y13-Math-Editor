@@ -80,7 +80,7 @@ export function OpenSaveScreen({ close, openSave }) {
 }
 
 // Component to create a new save
-export function SaveScreen({ close, save, title }) {
+export function SaveScreen({ close, save, title, input }) {
 
     const [inputTitle, setInputTitle] = useState(title)
     const [message, setMessage] = useState("")
@@ -117,9 +117,15 @@ export function SaveScreen({ close, save, title }) {
                     className="saveSaveButton"
                     onClick={() => {
                         // If valid title, save and close. Otherwise, set warning message
-                        if (inputTitle != "") {
-                            save(inputTitle)
-                            close()
+                        if (inputTitle.trim().length !== 0) {
+                            if (input.trim().length !== 0) {
+                                save(inputTitle)
+                                close()
+                            }
+                            else {
+                                setMessage("Must Have Math Content To Save")
+                            }
+                            
                         }
                         else {
                             setMessage("Enter a Valid Save Name")

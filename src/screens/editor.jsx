@@ -248,6 +248,7 @@ function Editor() {
                         :
                             <SaveScreen
                                 title={title}
+                                input={input}
                                 close={() => setSaving(false)}
                                 save={(saveTitle) => {
                                     const newId = crypto.randomUUID()
