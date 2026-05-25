@@ -7,33 +7,6 @@
 // Import token class
 import Token from './token.js'
 
-// Takes the string and seperates it into two strings, one before and one after the seperator
-const seperateByFirstOccurence = (string, seperator) => {
-    const [before, ...rest] = string.split(seperator)
-    const after = rest.join(seperator)
-    return [before, after]
-}
-
-// Returns object with two strings, comment and preComment
-const parseComment = (input) => {
-
-    if (input.includes("%")) {
-
-        // Split by \n first, then by %
-        const [preComment, comment] = seperateByFirstOccurence(seperateByFirstOccurence(input, "\n"), "%")
-        return {
-            "comment": comment,
-            "preComment": preComment
-        }
-    }
-    else {
-        return {
-            "comment": "",
-            "preComment": input
-        }
-    }
-}
-
 // Returns an array of TOKENs, containing the parsed LaTeX code by scanning from left to right
 // Upon reaching brackets, it will recursively call itself to parse their contents
 const parseChunk = (input) => {
@@ -130,22 +103,15 @@ const parseChunk = (input) => {
     return tokens
 }
 
-// Returns an array of tokens with fully parsed LaTeX, with minimal nesting
+// Returns an array of tokens with fully parsed LaTeX, with minimal token nesting
 export const parseLatex = (input) => {
 
     var tokens = []
     var lines = input.split("\n")
     
     lines.forEach(line => {
-
-        // Parse line for comments and chunks
-        var result = parseComment(line)
-        tokens.push(...parseChunk(result.preComment))
-
-        // If there is a comment which exists, create a comment token
-        if (result.comment != "") {
-            tokens.push(new Token(result.comment, 0, "comment"))
-        }
+        // Parse line for comments
+        tokens.push(...parseChunk(line.split("%")[0]))
     })
 
     return tokens
